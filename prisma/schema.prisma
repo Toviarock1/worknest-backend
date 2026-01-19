@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ProjectRoles {
+  owner
+  member
+}
+
+enum TaskStatus {
+  todo
+  in_progess
+  done
+}
+
+model User {
+  id       String  @id @default(uuid())
+  name     String?
+  email    String  @unique
+  password String
+
+  createdAt      DateTime        @default(now())
+  projects       Project[]
+  projectMembers ProjectMember[]
+  tasks          Task[]
+  messages       Message[]
+  files          File[]
+}
+
+model Project {
+  id      String @id @default(uuid())
+  name    String
+  ownerId String
+
+  owner          User            @relation(fields: [ownerId], references: [id])
+  projectMembers ProjectMember[]
+  tasks          Task[]
+  messages       Message[]
+  files          File[]
+  createdAt      DateTime        @default(now())
+}
+
+model ProjectMember {
+  id        String       @id @default(uuid())
+  userId    String
+  projectId String
+  role      ProjectRoles @default(member)
+
+  user    User    @relation(fields: [userId], references: [id])
+  project Project @relation(fields: [projectId], references: [id])
+
+  joinedAt DateTime @default(now())
+
+  @@unique([userId, projectId])
+}
+
+model Task {
+  id          String  @id @default(uuid())
+  title       String
+  description String?
+
+  status TaskStatus @default(todo)
+
+  projectId    String
+  assignedToId String?
+
+  project    Project @relation(fields: [projectId], references: [id])
+  assignedTo User?   @relation(fields: [assignedToId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model Message {
+  id      String @id @default(uuid())
+  content String
+
+  projectId String
+  senderId  String
+
+  project Project @relation(fields: [projectId], references: [id])
+  sender  User    @relation(fields: [senderId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model File {
+  id   String @id @default(uuid())
+  name String
+  url  String
+  size Int
+
+  projectId  String
+  uploaderId String
+
+  project  Project @relation(fields: [projectId], references: [id])
+  uploader User    @relation(fields: [uploaderId], references: [id])
+
+  createdAt DateTime @default(now())
+}

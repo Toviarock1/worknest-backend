@@ -1,0 +1,19 @@
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: my-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: worknest
+      # Option A: Enable passwordless (trust)
+      POSTGRES_HOST_AUTH_METHOD: trust
+      # Option B: Or set a password (uncomment below and comment out trust)
+      # POSTGRES_PASSWORD: mypassword 
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
