@@ -9,6 +9,8 @@
     "db:generate": "prisma generate",
     "db:setup": "prisma migrate dev && prisma generate",
     "db:view": "prisma studio",
+    "dock:start": "docker compose up -d",
+    "dock:stop": "docker compose stop",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
