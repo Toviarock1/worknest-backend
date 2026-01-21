@@ -3,7 +3,6 @@ import * as projectService from "./project.service";
 import response from "./../../utils/responseObject";
 import statusCodes from "./../../constants/statusCodes";
 import { getIO } from "./../../config/socket";
-import { string } from "zod";
 
 export const create = async (
   req: Request,
@@ -142,6 +141,38 @@ export const listProjectMembers = async (
       );
     }
 
+    next(err);
+  }
+};
+
+export const userProjects = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userProjects = await projectService.listAllUserProjects(
+      (req as any).user.id
+    );
+    return res.status(statusCodes.OK).json(
+      response({
+        message: "User project retrieved successfully",
+        status: statusCodes.OK,
+        success: true,
+        data: userProjects,
+      })
+    );
+  } catch (err) {
+    if (err.message === "NOT_MEMBER") {
+      return res.status(statusCodes.NOTFOUND).json(
+        response({
+          message: "User is not a member of any project",
+          status: statusCodes.NOTFOUND,
+          success: false,
+          data: {},
+        })
+      );
+    }
     next(err);
   }
 };

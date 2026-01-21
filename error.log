@@ -1,2 +1,6 @@
 {"err":{},"level":"error","message":"POST /api/v1/auth/login","timestamp":"2026-01-19T13:18:49.862Z"}
 {"err":{},"level":"error","message":"POST /api/v1/project/create","timestamp":"2026-01-19T22:19:41.594Z"}
+{"err":{"clientVersion":"7.2.0"},"level":"error","message":"GET /api/v1/project","timestamp":"2026-01-21T00:23:54.522Z"}
+{"err":{"clientVersion":"7.2.0"},"level":"error","message":"GET /api/v1/project","timestamp":"2026-01-21T00:25:01.477Z"}
+{"err":{"clientVersion":"7.2.0"},"level":"error","message":"GET /api/v1/project","timestamp":"2026-01-21T00:26:38.457Z"}
+{"err":{"clientVersion":"7.2.0"},"level":"error","message":"GET /api/v1/project","timestamp":"2026-01-21T00:27:06.557Z"}

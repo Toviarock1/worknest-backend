@@ -84,4 +84,19 @@ async function listProjectMembers(id: string, userId: string) {
   return projectMembers;
 }
 
-export { create, addMember, listProjectMembers };
+async function listAllUserProjects(userId: string) {
+  const userProjects = await prisma.projectMember.findMany({
+    where: {
+      userId: userId,
+    },
+    include: {
+      project: true,
+    },
+  });
+
+  if (userProjects.length <= 0) throw new Error("NOT_MEMBER");
+
+  return userProjects;
+}
+
+export { create, addMember, listProjectMembers, listAllUserProjects };
