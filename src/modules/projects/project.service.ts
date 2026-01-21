@@ -27,6 +27,35 @@ async function create(name: string, ownerId: string) {
   });
 }
 
+async function updateProject(
+  projectId: string,
+  userId: string,
+  name?: string,
+  description?: string
+) {
+  const updatedData: { name?: string; description?: string } = {};
+  if (name !== undefined) updatedData.name = name;
+
+  if (description !== undefined) updatedData.description = description;
+
+  const isOwner = await prisma.project.findUnique({
+    where: {
+      id: projectId,
+      ownerId: userId,
+    },
+  });
+
+  if (!isOwner) throw new Error("UNAUTHORIZED");
+  const updatedProject = await prisma.project.update({
+    where: {
+      id: projectId,
+    },
+    data: updatedData,
+  });
+
+  return updatedProject;
+}
+
 async function addMember(
   projectId: string,
   userEmail: string,
@@ -99,4 +128,10 @@ async function listAllUserProjects(userId: string) {
   return userProjects;
 }
 
-export { create, addMember, listProjectMembers, listAllUserProjects };
+export {
+  create,
+  updateProject,
+  addMember,
+  listProjectMembers,
+  listAllUserProjects,
+};

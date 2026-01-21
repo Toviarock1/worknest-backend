@@ -40,16 +40,18 @@ model User {
 }
 
 model Project {
-  id      String @id @default(uuid())
-  name    String
-  ownerId String
+  id          String  @id @default(uuid())
+  name        String
+  ownerId     String
+  description String?
 
   owner          User            @relation(fields: [ownerId], references: [id])
   projectMembers ProjectMember[]
   tasks          Task[]
   messages       Message[]
   files          File[]
-  createdAt      DateTime        @default(now())
+
+  createdAt DateTime @default(now())
 }
 
 model ProjectMember {

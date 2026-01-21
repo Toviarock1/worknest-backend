@@ -6,6 +6,22 @@ export const createSchema = z.object({
   }),
 });
 
+export const updateSchema = z.object({
+  body: z
+    .object({
+      name: z.string().min(1, "Name cannot be empty"),
+      description: z.string().min(1, "Description cannot be empty"),
+    })
+    .partial()
+    .refine(
+      (data) => data.name !== undefined || data.description !== undefined,
+      {
+        message: "At least one of 'name' or 'description' must be provided",
+        path: ["name"],
+      }
+    ),
+});
+
 export const addMemberSchema = z.object({
   body: z.object({
     projectId: z.string().max(255),

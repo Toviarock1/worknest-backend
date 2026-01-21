@@ -176,3 +176,42 @@ export const userProjects = async (
     next(err);
   }
 };
+
+export const update = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const { name, description } = req.body;
+    // console.log(name, description);
+    const updatedProject = await projectService.updateProject(
+      id as string,
+      (req as any).user.id,
+      name,
+      description
+    );
+
+    return res.status(statusCodes.OK).json(
+      response({
+        message: "Project updated",
+        status: statusCodes.OK,
+        success: true,
+        data: updatedProject,
+      })
+    );
+  } catch (err) {
+    if (err.message === "UNAUTHORIZED") {
+      return res.status(statusCodes.UNAUTHORIZED).json(
+        response({
+          message: "User is not the owner",
+          status: statusCodes.UNAUTHORIZED,
+          success: false,
+          data: {},
+        })
+      );
+    }
+    next(err);
+  }
+};

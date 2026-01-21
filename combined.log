@@ -9,3 +9,14 @@
 {"err":{"clientVersion":"7.2.0"},"level":"error","message":"GET /api/v1/project","timestamp":"2026-01-21T00:25:01.477Z"}
 {"err":{"clientVersion":"7.2.0"},"level":"error","message":"GET /api/v1/project","timestamp":"2026-01-21T00:26:38.457Z"}
 {"err":{"clientVersion":"7.2.0"},"level":"error","message":"GET /api/v1/project","timestamp":"2026-01-21T00:27:06.557Z"}
+{"err":{"clientVersion":"7.2.0","name":"PrismaClientValidationError"},"level":"error","message":"PATCH /api/v1/project/99b1b283-bfd4-4593-9211-355294a124ff","timestamp":"2026-01-21T03:23:21.856Z"}
+{"err":{"clientVersion":"7.2.0","name":"PrismaClientValidationError"},"level":"error","message":"PATCH /api/v1/project/99b1b283-bfd4-4593-9211-355294a124ff","timestamp":"2026-01-21T03:27:16.613Z"}
+{"err":{"clientVersion":"7.2.0","name":"PrismaClientValidationError"},"level":"error","message":"PATCH /api/v1/project/99b1b283-bfd4-4593-9211-355294a124ff","timestamp":"2026-01-21T03:28:01.345Z"}
+{"err":{"clientVersion":"7.2.0","name":"PrismaClientValidationError"},"level":"error","message":"PATCH /api/v1/project/99b1b283-bfd4-4593-9211-355294a124ff","timestamp":"2026-01-21T03:28:41.922Z"}
+{"err":{"clientVersion":"7.2.0","name":"PrismaClientValidationError"},"level":"error","message":"PATCH /api/v1/project/99b1b283-bfd4-4593-9211-355294a124ff","timestamp":"2026-01-21T03:29:42.394Z"}
+{"err":{"clientVersion":"7.2.0","name":"PrismaClientValidationError"},"level":"error","message":"PATCH /api/v1/project/99b1b283-bfd4-4593-9211-355294a124ff","timestamp":"2026-01-21T03:30:03.474Z"}
+{"err":{"clientVersion":"7.2.0","name":"PrismaClientValidationError"},"level":"error","message":"PATCH /api/v1/project/99b1b283-bfd4-4593-9211-355294a124ff","timestamp":"2026-01-21T03:32:58.470Z"}
+{"err":{"clientVersion":"7.2.0","name":"PrismaClientValidationError"},"level":"error","message":"PATCH /api/v1/project/99b1b283-bfd4-4593-9211-355294a124ff","timestamp":"2026-01-21T03:34:08.100Z"}
+{"err":{"clientVersion":"7.2.0","name":"PrismaClientValidationError"},"level":"error","message":"PATCH /api/v1/project/99b1b283-bfd4-4593-9211-355294a124ff","timestamp":"2026-01-21T03:36:08.243Z"}
+{"err":{"clientVersion":"7.2.0","name":"PrismaClientValidationError"},"level":"error","message":"PATCH /api/v1/project/99b1b283-bfd4-4593-9211-355294a124ff","timestamp":"2026-01-21T03:39:09.487Z"}
+{"err":{"clientVersion":"7.2.0","name":"PrismaClientValidationError"},"level":"error","message":"PATCH /api/v1/project/99b1b283-bfd4-4593-9211-355294a124ff","timestamp":"2026-01-21T03:39:27.335Z"}
