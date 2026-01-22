@@ -10,7 +10,8 @@ async function create(name: string, ownerId: string) {
     },
   });
 
-  if (existingProject) throw new Error("DUPLICATE_PROJECT");
+  if (existingProject)
+    throw new AppError("Project already exist", statusCodes.CONFLICT);
 
   return await prisma.$transaction(async (tx) => {
     const project = await tx.project.create({
@@ -47,7 +48,8 @@ async function updateProject(
     },
   });
 
-  if (!isOwner) throw new Error("UNAUTHORIZED");
+  if (!isOwner)
+    throw new AppError("User is not the owner", statusCodes.UNAUTHORIZED);
   const updatedProject = await prisma.project.update({
     where: {
       id: projectId,
@@ -75,7 +77,8 @@ async function deleteProject(id: string, userId: string) {
     },
   });
 
-  if (!isOwner) throw new Error("UNAUTHORIZED");
+  if (!isOwner)
+    throw new AppError("User is not the owner", statusCodes.UNAUTHORIZED);
 
   return await prisma.project.delete({
     where: {
@@ -97,7 +100,11 @@ async function addMember(
     },
   });
 
-  if (!projectOwner) throw new Error("UNAUTHORIZED_ACTION");
+  if (!projectOwner)
+    throw new AppError(
+      "Access denied. only owners can add members",
+      statusCodes.UNAUTHORIZED
+    );
 
   const user = await prisma.user.findUnique({
     where: {
@@ -106,7 +113,7 @@ async function addMember(
   });
   // console.log(user);
 
-  if (!user) throw new Error("USER_NOT_FOUND");
+  if (!user) throw new AppError("User does not exist", statusCodes.NOTFOUND);
 
   const existingMember = await prisma.projectMember.findUnique({
     where: {
@@ -114,7 +121,8 @@ async function addMember(
     },
   });
 
-  if (existingMember) throw new Error("USER_ALREADY_EXIST");
+  if (existingMember)
+    throw new AppError("User is already a member", statusCodes.CONFLICT);
 
   return await prisma.projectMember.create({
     data: {
@@ -132,11 +140,16 @@ async function listProjectMembers(id: string, userId: string) {
     },
     include: { projectMembers: true },
   });
-  if (!projectMembers) throw new Error("NOT_FOUND");
+  if (!projectMembers)
+    throw new AppError("Project not found", statusCodes.NOTFOUND);
   const { projectMembers: membersList } = projectMembers;
 
   const isMember = membersList.filter((member) => member.userId === userId);
-  if (!isMember) throw new Error("UNAUTHORIZED");
+  if (!isMember)
+    throw new AppError(
+      "Access denied. your not a member of this project",
+      statusCodes.UNAUTHORIZED
+    );
 
   return projectMembers;
 }
@@ -151,7 +164,11 @@ async function listAllUserProjects(userId: string) {
     },
   });
 
-  if (userProjects.length <= 0) throw new Error("NOT_MEMBER");
+  if (userProjects.length <= 0)
+    throw new AppError(
+      "User is not a member of any project",
+      statusCodes.NOTFOUND
+    );
 
   return userProjects;
 }

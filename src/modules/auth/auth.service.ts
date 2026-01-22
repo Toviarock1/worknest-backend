@@ -2,6 +2,8 @@ import prisma from "./../../config/db";
 import bcrypt from "bcrypt";
 import { env } from "config/env";
 import jwt, { Secret } from "jsonwebtoken";
+import { AppError } from "./../../utils/AppError";
+import statusCodes from "./../../constants/statusCodes";
 
 async function register(payload: {
   name: string;
@@ -15,7 +17,7 @@ async function register(payload: {
   });
 
   if (user) {
-    throw new Error("USER_EXIST");
+    throw new AppError("User already exist", statusCodes.CONFLICT);
   }
 
   const hashpassword = await bcrypt
@@ -39,12 +41,12 @@ async function login(payload: { email: string; password: string }) {
   });
 
   if (!user) {
-    throw new Error("AUTH_FAILED");
+    throw new AppError("Invalid email/password", statusCodes.UNAUTHORIZED);
   }
   const validPassword = await bcrypt.compare(payload.password, user.password);
 
   if (!validPassword) {
-    throw new Error("INVALID_EMAIL/PASSWORD");
+    throw new AppError("Invalid email/password", statusCodes.BAD_REQUEST);
   }
 
   const token = await jwt.sign(
