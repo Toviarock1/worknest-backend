@@ -1,4 +1,6 @@
+import statusCodes from "./../../constants/statusCodes";
 import prisma from "./../../config/db";
+import { AppError } from "./../../utils/AppError";
 
 async function create(name: string, ownerId: string) {
   const existingProject = await prisma.project.findFirst({
@@ -54,6 +56,32 @@ async function updateProject(
   });
 
   return updatedProject;
+}
+
+async function deleteProject(id: string, userId: string) {
+  const projectExist = await prisma.project.findFirst({
+    where: {
+      id,
+    },
+  });
+
+  if (!projectExist)
+    throw new AppError("Project not found", statusCodes.NOTFOUND);
+
+  const isOwner = await prisma.project.findUnique({
+    where: {
+      id,
+      ownerId: userId,
+    },
+  });
+
+  if (!isOwner) throw new Error("UNAUTHORIZED");
+
+  return await prisma.project.delete({
+    where: {
+      id,
+    },
+  });
 }
 
 async function addMember(
@@ -134,4 +162,5 @@ export {
   addMember,
   listProjectMembers,
   listAllUserProjects,
+  deleteProject,
 };

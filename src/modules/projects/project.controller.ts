@@ -215,3 +215,51 @@ export const update = async (
     next(err);
   }
 };
+
+export const deleteProject = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const { id: userId } = (req as any).user;
+    const deletedProject = await projectService.deleteProject(
+      id as string,
+      userId
+    );
+
+    return res.status(statusCodes.OK).json(
+      response({
+        message: "Project deleted successfully",
+        status: statusCodes.OK,
+        success: true,
+        data: deletedProject,
+      })
+    );
+  } catch (err) {
+    if (err.message === "UNAUTHORIZED") {
+      return res.status(statusCodes.UNAUTHORIZED).json(
+        response({
+          message: "User is not the owner",
+          status: statusCodes.UNAUTHORIZED,
+          success: false,
+          data: {},
+        })
+      );
+    }
+
+    // if (err.message === "NOT_FOUND") {
+    //   return res.status(statusCodes.NOTFOUND).json(
+    //     response({
+    //       message: `Project not found`,
+    //       status: statusCodes.NOTFOUND,
+    //       success: false,
+    //       data: {},
+    //     })
+    //   );
+    // }
+
+    next(err);
+  }
+};

@@ -47,6 +47,6 @@ export default function (
     success: false,
     status: statusCode,
     message: message,
-    data: {},
+    data: process.env.NODE_ENV === "development" ? { stack: err.stack } : {},
   });
 }

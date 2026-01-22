@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   addMember,
   create,
+  deleteProject,
   listProjectMembers,
   update,
   userProjects,
@@ -22,5 +23,6 @@ router.post(
 );
 router.patch("/:id", authMiddleware, validate(updateSchema), update);
 router.get("/:id/members", authMiddleware, listProjectMembers);
+router.delete("/:id", authMiddleware, deleteProject);
 
 export default router;
