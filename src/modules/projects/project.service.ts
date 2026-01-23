@@ -1,6 +1,7 @@
 import statusCodes from "./../../constants/statusCodes";
 import prisma from "./../../config/db";
 import { AppError } from "./../../utils/AppError";
+import { ensureIsProjectOwner, ensureProjectExist } from "utils/permissions";
 
 async function create(name: string, ownerId: string) {
   const existingProject = await prisma.project.findFirst({
@@ -41,15 +42,8 @@ async function updateProject(
 
   if (description !== undefined) updatedData.description = description;
 
-  const isOwner = await prisma.project.findUnique({
-    where: {
-      id: projectId,
-      ownerId: userId,
-    },
-  });
+  await ensureIsProjectOwner(projectId, userId);
 
-  if (!isOwner)
-    throw new AppError("User is not the owner", statusCodes.UNAUTHORIZED);
   const updatedProject = await prisma.project.update({
     where: {
       id: projectId,
@@ -61,25 +55,9 @@ async function updateProject(
 }
 
 async function deleteProject(id: string, userId: string) {
-  const projectExist = await prisma.project.findFirst({
-    where: {
-      id,
-    },
-  });
+  await ensureProjectExist(id);
 
-  if (!projectExist)
-    throw new AppError("Project not found", statusCodes.NOTFOUND);
-
-  const isOwner = await prisma.project.findUnique({
-    where: {
-      id,
-      ownerId: userId,
-    },
-  });
-
-  if (!isOwner)
-    throw new AppError("User is not the owner", statusCodes.UNAUTHORIZED);
-
+  await ensureIsProjectOwner(id, userId);
   return await prisma.project.delete({
     where: {
       id,
@@ -92,20 +70,7 @@ async function addMember(
   userEmail: string,
   ownerId: string
 ) {
-  const projectOwner = await prisma.projectMember.findFirst({
-    where: {
-      projectId: projectId,
-      userId: ownerId,
-      role: "owner",
-    },
-  });
-
-  if (!projectOwner)
-    throw new AppError(
-      "Access denied. only owners can add members",
-      statusCodes.UNAUTHORIZED
-    );
-
+  await ensureIsProjectOwner(projectId, ownerId);
   const user = await prisma.user.findUnique({
     where: {
       email: userEmail,

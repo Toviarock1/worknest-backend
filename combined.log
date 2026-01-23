@@ -30,3 +30,7 @@
 {"level":"warn","message":"DELETE /api/v1/project/bf0d6631-e4d6-4a30-8c2c-6ab7d4461d1a - Project not found","timestamp":"2026-01-22T04:56:19.057Z"}
 {"level":"warn","message":"DELETE /api/v1/project/bf0d6631-e4d6-4a30-8c2c-6ab7d4461d1a - Project not found","timestamp":"2026-01-22T05:04:52.493Z"}
 {"level":"warn","message":"DELETE /api/v1/project/bf0d6631-e4d6-4a30-8c2c-6ab7d4461d1a - Project not found","timestamp":"2026-01-22T05:05:17.241Z"}
+{"level":"warn","message":"POST /api/v1/tasks - User not a member","timestamp":"2026-01-23T16:17:20.480Z"}
+{"err":{},"level":"error","message":"GET /api/v1/tasks/99b1b283-bfd4-4593-9211-355294a124ff","timestamp":"2026-01-23T16:37:01.061Z"}
+{"level":"warn","message":"GET /api/v1/tasks/99b1b283-bfd4-4593-9211-355294a124f - User not a member","timestamp":"2026-01-23T16:50:24.077Z"}
+{"level":"warn","message":"GET /api/v1/tasks/99b1b283-bfd4-4593-9211-355294a124f - Project not found","timestamp":"2026-01-23T16:51:41.029Z"}

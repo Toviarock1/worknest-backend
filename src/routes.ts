@@ -1,6 +1,7 @@
 import { Router } from "express";
 import authRoutes from "./modules/auth/auth.routes";
 import projectRoutes from "./modules/projects/project.routes";
+import taskRoutes from "./modules/tasks/tasks.routes";
 import statusCodes from "./constants/statusCodes";
 import response from "./utils/responseObject";
 
@@ -8,6 +9,7 @@ const rootRouter = Router();
 
 rootRouter.use("/auth", authRoutes);
 rootRouter.use("/project", projectRoutes);
+rootRouter.use("/tasks", taskRoutes);
 rootRouter.use("*", (req, res) => {
   res.status(statusCodes.NOTFOUND).json(
     response({

@@ -1,4 +1,4 @@
-import { string, z } from "zod";
+import { z } from "zod";
 
 export const createSchema = z.object({
   body: z.object({
@@ -24,7 +24,7 @@ export const updateSchema = z.object({
 
 export const addMemberSchema = z.object({
   body: z.object({
-    projectId: z.string().max(255),
+    projectId: z.uuid(),
     userEmail: z.email("Invalid email format").max(255),
   }),
 });
