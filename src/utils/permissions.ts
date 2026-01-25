@@ -46,3 +46,30 @@ export const ensureProjectExist = async (projectId: string) => {
 
   return projectExist;
 };
+
+// does task exist
+export const ensureTasksExist = async (taskId: string) => {
+  const TasksExist = await prisma.task.findFirst({
+    where: {
+      id: taskId,
+    },
+  });
+
+  if (!TasksExist) throw new AppError("Tasks not found", statusCodes.NOTFOUND);
+
+  return TasksExist;
+};
+
+// does user ecist
+export const ensureUserExist = async (email: string) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      email: email,
+    },
+  });
+  // console.log(user);
+
+  if (!user) throw new AppError("User does not exist", statusCodes.NOTFOUND);
+
+  return user;
+};

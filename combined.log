@@ -34,3 +34,10 @@
 {"err":{},"level":"error","message":"GET /api/v1/tasks/99b1b283-bfd4-4593-9211-355294a124ff","timestamp":"2026-01-23T16:37:01.061Z"}
 {"level":"warn","message":"GET /api/v1/tasks/99b1b283-bfd4-4593-9211-355294a124f - User not a member","timestamp":"2026-01-23T16:50:24.077Z"}
 {"level":"warn","message":"GET /api/v1/tasks/99b1b283-bfd4-4593-9211-355294a124f - Project not found","timestamp":"2026-01-23T16:51:41.029Z"}
+{"err":{"clientVersion":"7.2.0","name":"PrismaClientValidationError"},"level":"error","message":"PATCH /api/v1/tasks/706ca5b2-c737-4d9e-86b0-54dfdfa50ca7","timestamp":"2026-01-24T20:17:46.061Z"}
+{"err":{},"level":"error","message":"PATCH /api/v1/tasks/706ca5b2-c737-4d9e-86b0-54dfdfa50ca7","timestamp":"2026-01-24T21:44:45.913Z"}
+{"err":{"clientVersion":"7.2.0","name":"PrismaClientValidationError"},"level":"error","message":"PATCH /api/v1/tasks/706ca5b2-c737-4d9e-86b0-54dfdfa50ca7","timestamp":"2026-01-24T21:46:36.672Z"}
+{"err":{"clientVersion":"7.2.0","name":"PrismaClientValidationError"},"level":"error","message":"PATCH /api/v1/tasks/706ca5b2-c737-4d9e-86b0-54dfdfa50ca7","timestamp":"2026-01-24T21:56:47.719Z"}
+{"err":{"clientVersion":"7.2.0","name":"PrismaClientValidationError"},"level":"error","message":"DELETE /api/v1/tasks/706ca5b2-c737-4d9e-86b0-54dfdfa50ca7","timestamp":"2026-01-25T00:43:14.594Z"}
+{"err":{"clientVersion":"7.2.0","name":"PrismaClientValidationError"},"level":"error","message":"DELETE /api/v1/tasks/706ca5b2-c737-4d9e-86b0-54dfdfa50ca7","timestamp":"2026-01-25T00:44:17.603Z"}
+{"err":{"clientVersion":"7.2.0","name":"PrismaClientValidationError"},"level":"error","message":"DELETE /api/v1/tasks/706ca5b2-c737-4d9e-86b0-54dfdfa50ca7","timestamp":"2026-01-25T00:44:42.271Z"}

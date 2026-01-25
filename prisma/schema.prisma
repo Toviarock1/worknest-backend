@@ -20,7 +20,7 @@ enum ProjectRoles {
 
 enum TaskStatus {
   todo
-  in_progess
+  in_progress
   done
 }
 

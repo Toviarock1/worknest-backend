@@ -1,7 +1,14 @@
-import { ensureIsMember } from "utils/permissions";
+import {
+  ensureIsMember,
+  ensureIsProjectOwner,
+  ensureProjectExist,
+  ensureTasksExist,
+  ensureUserExist,
+} from "utils/permissions";
 import prisma from "./../../config/db";
 import statusCodes from "./../../constants/statusCodes";
 import { AppError } from "./../../utils/AppError";
+import { TaskStatus } from "../../../generated/prisma/enums";
 
 async function createTask(
   data: { title: string; projectId: string; assignedToId: string },
@@ -44,4 +51,73 @@ async function listTasks(projectId: string, userId: string) {
   return projectTasks;
 }
 
-export { createTask, listTasks };
+async function updateTaskStatus(
+  taskId: string,
+  status: TaskStatus,
+  userId: string
+) {
+  const task = await prisma.task.findUnique({
+    where: { id: taskId },
+    select: { projectId: true },
+  });
+
+  if (!task) throw new AppError("Task not found", statusCodes.NOTFOUND);
+
+  await ensureIsMember(task.projectId, userId);
+
+  const updatedTaskStats = await prisma.task.update({
+    where: { id: taskId },
+    data: {
+      status,
+    },
+  });
+
+  return { ...updatedTaskStats, projectId: task.projectId };
+}
+
+async function assignProjectTask(
+  taskId: string,
+  projectId: string,
+  userId: string,
+  assigneeEmail: string
+) {
+  await ensureProjectExist(projectId);
+  await ensureIsMember(projectId, userId);
+
+  const assignee = await ensureUserExist(assigneeEmail);
+
+  const assignTaskToMember = await prisma.task.update({
+    where: {
+      id: taskId,
+    },
+    data: {
+      assignedToId: assignee.id,
+    },
+  });
+
+  return assignTaskToMember;
+}
+
+async function deleteProjectTask(taskId: string, userId: string) {
+  await ensureTasksExist(taskId);
+  const task = await prisma.task.findUnique({
+    where: { id: taskId },
+    select: { projectId: true },
+  });
+
+  await ensureIsProjectOwner(task.projectId, userId);
+
+  return await prisma.task.delete({
+    where: {
+      id: taskId,
+    },
+  });
+}
+
+export {
+  createTask,
+  listTasks,
+  updateTaskStatus,
+  assignProjectTask,
+  deleteProjectTask,
+};

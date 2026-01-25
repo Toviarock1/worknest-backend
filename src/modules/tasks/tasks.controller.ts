@@ -39,3 +39,69 @@ export const listProjectTasks = catchAsync(
     );
   }
 );
+
+export const updateStatus = catchAsync(async (req: Request, res: Response) => {
+  const { taskId } = req.params;
+  const { status } = req.body;
+  const userId = (req as any).user.id;
+
+  const updatedTask = await taskService.updateTaskStatus(
+    taskId as string,
+    status,
+    userId
+  );
+
+  const io = getIO();
+  io.to(updatedTask.projectId).emit("task_updated", updatedTask);
+
+  return res.status(statusCodes.OK).json(
+    response({
+      message: "Tasks updated successfully",
+      status: statusCodes.OK,
+      success: true,
+      data: updatedTask,
+    })
+  );
+});
+
+export const assignTask = catchAsync(async (req: Request, res: Response) => {
+  const { taskId } = req.params;
+  const { assigneeEmail, projectId } = req.body;
+  const userId = (req as any).user.id;
+
+  const assignedTo = await taskService.assignProjectTask(
+    taskId as string,
+    projectId,
+    userId,
+    assigneeEmail
+  );
+
+  const io = getIO();
+  io.to(projectId).emit("task_assigned", assignedTo);
+
+  return res.status(statusCodes.OK).json(
+    response({
+      message: "Tasks assigned successfully",
+      status: statusCodes.OK,
+      success: true,
+      data: assignedTo,
+    })
+  );
+});
+
+export const deleteTask = catchAsync(async (req: Request, res: Response) => {
+  const { taskId } = req.params;
+  const userId = (req as any).user.id;
+  const deletedTask = await taskService.deleteProjectTask(
+    taskId as string,
+    userId
+  );
+  return res.status(statusCodes.OK).json(
+    response({
+      message: "Tasks deleted successfully",
+      status: statusCodes.OK,
+      success: true,
+      data: deletedTask,
+    })
+  );
+});

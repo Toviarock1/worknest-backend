@@ -1,7 +1,11 @@
 import statusCodes from "./../../constants/statusCodes";
 import prisma from "./../../config/db";
 import { AppError } from "./../../utils/AppError";
-import { ensureIsProjectOwner, ensureProjectExist } from "utils/permissions";
+import {
+  ensureIsProjectOwner,
+  ensureProjectExist,
+  ensureUserExist,
+} from "utils/permissions";
 
 async function create(name: string, ownerId: string) {
   const existingProject = await prisma.project.findFirst({
@@ -71,14 +75,7 @@ async function addMember(
   ownerId: string
 ) {
   await ensureIsProjectOwner(projectId, ownerId);
-  const user = await prisma.user.findUnique({
-    where: {
-      email: userEmail,
-    },
-  });
-  // console.log(user);
-
-  if (!user) throw new AppError("User does not exist", statusCodes.NOTFOUND);
+  const user = await ensureUserExist(userEmail);
 
   const existingMember = await prisma.projectMember.findUnique({
     where: {
