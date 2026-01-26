@@ -60,12 +60,18 @@ export const ensureTasksExist = async (taskId: string) => {
   return TasksExist;
 };
 
-// does user ecist
-export const ensureUserExist = async (email: string) => {
+// does user exist
+export const ensureUserExist = async (email?: string, id?: string) => {
+  if (!email && !id) {
+    throw new AppError(
+      "User identifier required (email or id)",
+      statusCodes.BAD_REQUEST
+    );
+  }
+
   const user = await prisma.user.findUnique({
-    where: {
-      email: email,
-    },
+    where: email ? { email } : { id },
+    select: { id: true, name: true, email: true, createdAt: true },
   });
   // console.log(user);
 
