@@ -1,11 +1,20 @@
 import { Request, Response, NextFunction } from "express";
 import winston from "winston";
 
+// Custom format to ensure error details are visible to Winston
+const errorEnumeration = winston.format((info) => {
+  if (info instanceof Error) {
+    return Object.assign({ message: info.message, stack: info.stack }, info);
+  }
+  return info;
+});
+
 const logger = winston.createLogger({
   level: "info",
   format: winston.format.combine(
     winston.format.timestamp(),
-    winston.format.errors({ stack: true }), // Captures the stack trace
+    errorEnumeration(), // MUST come before json()
+    winston.format.errors({ stack: true }),
     winston.format.json()
   ),
   transports: [
@@ -14,39 +23,59 @@ const logger = winston.createLogger({
   ],
 });
 
-// Add console logging for development
 if (process.env.NODE_ENV !== "production") {
   logger.add(
     new winston.transports.Console({
-      format: winston.format.simple(),
+      format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.printf(
+          ({ timestamp, level, message, stack, ...meta }) => {
+            // Print a clean, readable line for the console
+            const metaStr = Object.keys(meta).length
+              ? JSON.stringify(meta)
+              : "";
+            return `${timestamp} ${level}: ${message} ${metaStr} ${
+              stack ? "\n" + stack : ""
+            }`;
+          }
+        )
+      ),
     })
   );
 }
 
 export default function (
-  err: any, // Changed to 'any' to access custom properties like .statusCode
+  err: any,
   req: Request,
   res: Response,
   next: NextFunction
 ) {
-  // 1. Determine the status (Use 500 only if not specified)
   const statusCode = err.statusCode || 500;
 
-  // 2. Log based on severity
-  if (statusCode >= 500) {
-    logger.error(`${req.method} ${req.url}`, { err });
-  } else {
-    logger.warn(`${req.method} ${req.url} - ${err.message}`);
-  }
+  // Add more context: who, where, and what
+  const errorContext = {
+    method: req.method,
+    url: req.originalUrl,
+    ip: req.ip,
+    user: (req as any).user?.id || "anonymous",
+    // body: req.body, // CAUTION: Avoid logging sensitive data like passwords
+  };
 
-  // 3. Clean response for the user
-  const message =
-    statusCode === 500 ? "Something went wrong on our end" : err.message;
+  if (statusCode >= 500) {
+    logger.error(err.message, { ...errorContext, stack: err.stack });
+  } else {
+    logger.warn(err.message, errorContext);
+  }
 
   res.status(statusCode).json({
     success: false,
     status: statusCode,
-    message: message,
-    data: process.env.NODE_ENV === "development" ? { stack: err.stack } : {},
+    message:
+      statusCode === 500 ? "Something went wrong on our end" : err.message,
+    // Provide stack trace only in development
+    data:
+      process.env.NODE_ENV === "development"
+        ? { stack: err.stack, ...errorContext }
+        : {},
   });
 }
