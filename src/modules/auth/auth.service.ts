@@ -49,18 +49,19 @@ async function login(payload: { email: string; password: string }) {
     throw new AppError("Invalid email/password", statusCodes.BAD_REQUEST);
   }
 
-  const token = await jwt.sign(
-    {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-    },
-    env.JWT_SECRET as Secret,
-    { expiresIn: env.JWT_EXPIRES_IN as any }
-  );
+  const userData = {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+  };
+
+  const token = await jwt.sign(userData, env.JWT_SECRET as Secret, {
+    expiresIn: env.JWT_EXPIRES_IN as any,
+  });
 
   const data = {
-    ...user,
+    ...userData,
+    createdAt: user.createdAt,
     token,
   };
 
