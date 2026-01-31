@@ -12,7 +12,7 @@ export const register = catchAsync(async (req: Request, res: Response) => {
       status: statusCodes.CREATED,
       success: true,
       data: userCreated,
-    })
+    }),
   );
 });
 
@@ -25,6 +25,6 @@ export const login = async (req: Request, res: Response) => {
       status: statusCodes.OK,
       success: true,
       data: user,
-    })
+    }),
   );
 };

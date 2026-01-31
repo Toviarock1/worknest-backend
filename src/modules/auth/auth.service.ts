@@ -24,13 +24,23 @@ async function register(payload: {
     .hash(payload.password, 10)
     .then((hash) => hash);
 
-  console.log(hashpassword);
+  // console.log(hashpassword);
 
   const newUser = await prisma.user.create({
     data: { ...payload, password: hashpassword },
   });
 
-  return newUser;
+  const userData = {
+    id: newUser.id,
+    name: newUser.name,
+    email: newUser.email,
+  };
+
+  const token = await jwt.sign(userData, env.JWT_SECRET as Secret, {
+    expiresIn: env.JWT_EXPIRES_IN as any,
+  });
+
+  return { ...newUser, token };
 }
 
 async function login(payload: { email: string; password: string }) {
