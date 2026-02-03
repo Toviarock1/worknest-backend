@@ -39,7 +39,7 @@ async function updateProject(
   projectId: string,
   userId: string,
   name?: string,
-  description?: string
+  description?: string,
 ) {
   const updatedData: { name?: string; description?: string } = {};
   if (name !== undefined) updatedData.name = name;
@@ -72,7 +72,7 @@ async function deleteProject(id: string, userId: string) {
 async function addMember(
   projectId: string,
   userEmail: string,
-  ownerId: string
+  ownerId: string,
 ) {
   await ensureIsProjectOwner(projectId, ownerId);
   const user = await ensureUserExist(userEmail);
@@ -100,7 +100,18 @@ async function listProjectMembers(id: string, userId: string) {
     where: {
       id,
     },
-    include: { projectMembers: true },
+    include: {
+      projectMembers: {
+        include: {
+          user: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+        },
+      },
+    },
   });
   if (!projectMembers)
     throw new AppError("Project not found", statusCodes.NOTFOUND);
@@ -110,7 +121,7 @@ async function listProjectMembers(id: string, userId: string) {
   if (!isMember)
     throw new AppError(
       "Access denied. your not a member of this project",
-      statusCodes.UNAUTHORIZED
+      statusCodes.UNAUTHORIZED,
     );
 
   return projectMembers;
@@ -129,7 +140,7 @@ async function listAllUserProjects(userId: string) {
   if (userProjects.length <= 0)
     throw new AppError(
       "User is not a member of any project",
-      statusCodes.NOTFOUND
+      statusCodes.NOTFOUND,
     );
 
   return userProjects;
