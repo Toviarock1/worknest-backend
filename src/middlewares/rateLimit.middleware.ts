@@ -4,7 +4,7 @@ import response from "../utils/responseObject";
 
 export const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  limit: 100, // Limit each IP to 100 requests per window
+  limit: 500, // Limit each IP to 100 requests per window
   message: response({
     message: "Too many requests, please try again later.",
     status: statusCodes.TOO_MANY_REQUEST,

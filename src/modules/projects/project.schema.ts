@@ -18,11 +18,11 @@ export const updateSchema = z.object({
       {
         message: "At least one of 'name' or 'description' must be provided",
         path: ["name"],
-      }
+      },
     ),
 });
 
-export const addMemberSchema = z.object({
+export const MemberSchema = z.object({
   body: z.object({
     projectId: z.uuid(),
     userEmail: z.email("Invalid email format").max(255),

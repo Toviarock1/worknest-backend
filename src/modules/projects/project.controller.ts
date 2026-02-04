@@ -23,6 +23,7 @@ export const create = catchAsync(async (req: Request, res: Response) => {
 
 export const addMember = catchAsync(async (req: Request, res: Response) => {
   const { projectId, userEmail } = req.body;
+  console.log("here");
 
   const addMember = await projectService.addMember(
     projectId,

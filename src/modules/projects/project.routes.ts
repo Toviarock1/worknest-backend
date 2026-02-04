@@ -10,22 +10,17 @@ import {
 } from "./project.controller";
 import authMiddleware from "./../../middlewares/auth.middleware";
 import { validate } from "./../../middlewares/validation.middleware";
-import { addMemberSchema, createSchema, updateSchema } from "./project.schema";
+import { MemberSchema, createSchema, updateSchema } from "./project.schema";
 
 const router = Router();
 
 router.post("/", authMiddleware, validate(createSchema), create);
 router.get("/", authMiddleware, userProjects);
-router.post(
-  "/add-member",
-  authMiddleware,
-  validate(addMemberSchema),
-  addMember,
-);
+router.post("/add-member", authMiddleware, validate(MemberSchema), addMember);
 router.post(
   "/remove-member",
   authMiddleware,
-  validate(addMemberSchema),
+  validate(MemberSchema),
   removeMember,
 );
 router.patch("/:id", authMiddleware, validate(updateSchema), update);
