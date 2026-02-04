@@ -95,6 +95,27 @@ async function addMember(
   });
 }
 
+async function removeMember(
+  projectId: string,
+  userEmail: string,
+  requestingUserId: string,
+) {
+  const project = await ensureIsProjectOwner(projectId, requestingUserId);
+  const targetUser = await ensureUserExist(userEmail);
+
+  if (project.id === targetUser.id)
+    throw new AppError(
+      "The project owner cannot be removed from the project.",
+      statusCodes.BAD_REQUEST,
+    );
+
+  return await prisma.projectMember.delete({
+    where: {
+      userId_projectId: { userId: targetUser.id, projectId },
+    },
+  });
+}
+
 async function listProjectMembers(id: string, userId: string) {
   const projectMembers = await prisma.project.findUnique({
     where: {
@@ -153,4 +174,5 @@ export {
   listProjectMembers,
   listAllUserProjects,
   deleteProject,
+  removeMember,
 };

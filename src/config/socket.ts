@@ -28,7 +28,9 @@ export const initSocket = (server: HttpServer) => {
   });
 
   io.on("connection", (socket) => {
-    console.log("A user connected to WorkNest:", socket.id);
+    const userId = (socket as any).data.user.id;
+    socket.join(userId);
+    console.log(`📡 User ${userId} joined personal room`);
 
     socket.on("join_project", async (projectId: string) => {
       if (!projectId) return;
@@ -42,7 +44,7 @@ export const initSocket = (server: HttpServer) => {
 
       if (!membership) {
         console.warn(
-          `Unauthorized join attempt by user ${userId} for project ${projectId}`
+          `Unauthorized join attempt by user ${userId} for project ${projectId}`,
         );
         return socket.emit("error", {
           message: "You are not a member of this project",

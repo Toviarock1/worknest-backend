@@ -4,6 +4,7 @@ import {
   create,
   deleteProject,
   listProjectMembers,
+  removeMember,
   update,
   userProjects,
 } from "./project.controller";
@@ -19,7 +20,13 @@ router.post(
   "/add-member",
   authMiddleware,
   validate(addMemberSchema),
-  addMember
+  addMember,
+);
+router.post(
+  "/remove-member",
+  authMiddleware,
+  validate(addMemberSchema),
+  removeMember,
 );
 router.patch("/:id", authMiddleware, validate(updateSchema), update);
 router.get("/:id/members", authMiddleware, listProjectMembers);

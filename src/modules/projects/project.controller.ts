@@ -17,7 +17,7 @@ export const create = catchAsync(async (req: Request, res: Response) => {
       status: statusCodes.CREATED,
       success: true,
       data: project,
-    })
+    }),
   );
 });
 
@@ -27,7 +27,7 @@ export const addMember = catchAsync(async (req: Request, res: Response) => {
   const addMember = await projectService.addMember(
     projectId,
     userEmail,
-    (req as any).user.id
+    (req as any).user.id,
   );
 
   const io = getIO();
@@ -39,7 +39,29 @@ export const addMember = catchAsync(async (req: Request, res: Response) => {
       status: statusCodes.OK,
       success: true,
       data: { ...addMember },
-    })
+    }),
+  );
+});
+
+export const removeMember = catchAsync(async (req: Request, res: Response) => {
+  const { projectId, userEmail } = req.body;
+
+  const removedUser = await projectService.removeMember(
+    projectId,
+    userEmail,
+    (req as any).user.id,
+  );
+
+  const io = getIO();
+  io.to(removedUser.userId).emit("removed_from_project", { projectId });
+
+  return res.status(statusCodes.OK).json(
+    response({
+      message: "Member removed",
+      status: statusCodes.OK,
+      success: true,
+      data: { ...removedUser },
+    }),
   );
 });
 
@@ -49,7 +71,7 @@ export const listProjectMembers = catchAsync(
 
     const allProjectMembers = await projectService.listProjectMembers(
       id as string,
-      (req as any).user.id
+      (req as any).user.id,
     );
     return res.status(statusCodes.OK).json(
       response({
@@ -57,14 +79,14 @@ export const listProjectMembers = catchAsync(
         status: statusCodes.OK,
         success: true,
         data: allProjectMembers,
-      })
+      }),
     );
-  }
+  },
 );
 
 export const userProjects = catchAsync(async (req: Request, res: Response) => {
   const userProjects = await projectService.listAllUserProjects(
-    (req as any).user.id
+    (req as any).user.id,
   );
   return res.status(statusCodes.OK).json(
     response({
@@ -72,7 +94,7 @@ export const userProjects = catchAsync(async (req: Request, res: Response) => {
       status: statusCodes.OK,
       success: true,
       data: userProjects,
-    })
+    }),
   );
 });
 
@@ -84,7 +106,7 @@ export const update = catchAsync(async (req: Request, res: Response) => {
     id as string,
     (req as any).user.id,
     name,
-    description
+    description,
   );
 
   return res.status(statusCodes.OK).json(
@@ -93,7 +115,7 @@ export const update = catchAsync(async (req: Request, res: Response) => {
       status: statusCodes.OK,
       success: true,
       data: updatedProject,
-    })
+    }),
   );
 });
 
@@ -102,7 +124,7 @@ export const deleteProject = catchAsync(async (req: Request, res: Response) => {
   const { id: userId } = (req as any).user;
   const deletedProject = await projectService.deleteProject(
     id as string,
-    userId
+    userId,
   );
 
   return res.status(statusCodes.OK).json(
@@ -111,6 +133,6 @@ export const deleteProject = catchAsync(async (req: Request, res: Response) => {
       status: statusCodes.OK,
       success: true,
       data: deletedProject,
-    })
+    }),
   );
 });
