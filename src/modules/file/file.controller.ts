@@ -20,7 +20,7 @@ export const uploadFile = catchAsync(async (req: Request, res: Response) => {
     userId,
     file.originalname,
     cloudResponse.secure_url,
-    file.size
+    file.size,
   );
 
   const io = getIO();
@@ -32,7 +32,7 @@ export const uploadFile = catchAsync(async (req: Request, res: Response) => {
       status: statusCodes.CREATED,
       success: true,
       data: fileUpload,
-    })
+    }),
   );
 });
 
@@ -42,7 +42,7 @@ export const getFilesHistory = catchAsync(
     const userId = (req as any).user.id;
     const fileHistory = await fileService.getProjectFiles(
       projectId as string,
-      userId
+      userId,
     );
 
     return res.status(statusCodes.OK).json(
@@ -51,7 +51,25 @@ export const getFilesHistory = catchAsync(
         status: statusCodes.OK,
         success: true,
         data: fileHistory,
-      })
+      }),
     );
-  }
+  },
 );
+
+export const deleteFile = catchAsync(async (req: Request, res: Response) => {
+  const { fileId } = req.params;
+  const userId = (req as any).user.id;
+  const fileHistory = await fileService.deleteFile(fileId as string, userId);
+
+  const io = getIO();
+  io.to(fileHistory.projectId).emit("file_deleted", { fileId });
+
+  return res.status(statusCodes.OK).json(
+    response({
+      message: "File deleted successfully",
+      status: statusCodes.OK,
+      success: true,
+      data: fileHistory,
+    }),
+  );
+});

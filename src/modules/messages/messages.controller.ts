@@ -20,7 +20,7 @@ export const send = catchAsync(async (req: Request, res: Response) => {
       status: statusCodes.CREATED,
       success: true,
       data: message,
-    })
+    }),
   );
 });
 
@@ -29,14 +29,14 @@ export const getHistory = catchAsync(async (req: Request, res: Response) => {
   const userId = (req as any).user.id;
   const history = await messageService.getProjectChat(
     projectId as string,
-    userId
+    userId,
   );
-  return res.status(statusCodes.CREATED).json(
+  return res.status(statusCodes.OK).json(
     response({
       message: "Message retrieved successfully",
-      status: statusCodes.CREATED,
+      status: statusCodes.OK,
       success: true,
       data: history,
-    })
+    }),
   );
 });
