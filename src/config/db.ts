@@ -4,7 +4,7 @@ import { env } from "./env";
 import pg from "pg";
 
 const pool = new pg.Pool({
-  connectionString: env.DATABASE_URL,
+  connectionString: env.DIRECT_URL,
   // ssl: {
   //   rejectUnauthorized: false,
   // },

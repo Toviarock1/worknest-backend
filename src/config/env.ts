@@ -7,6 +7,7 @@ const envSchema = z.object({
     .default("development"),
   PORT: z.coerce.number().default(5050),
   DATABASE_URL: z.url(),
+  DIRECT_URL: z.url(),
   JWT_SECRET: z.string().min(32),
   JWT_EXPIRES_IN: z.string().min(2).max(3),
   CLOUDINARY_CLOUD_NAME: z.string(),
@@ -22,8 +23,8 @@ if (!_env.success) {
     `Invalid Environment Variables: ${JSON.stringify(
       z.treeifyError(_env.error),
       null,
-      2
-    )}`
+      2,
+    )}`,
   );
   process.exit(1);
 }
