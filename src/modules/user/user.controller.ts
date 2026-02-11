@@ -1,8 +1,8 @@
-import statusCodes from "./../../constants/statusCodes";
+import statusCodes from "./../../constants/statusCodes.js";
 import { Request, Response } from "express";
-import { catchAsync } from "./../../utils/catchAsync";
-import * as userService from "./user.service";
-import response from "./../../utils/responseObject";
+import { catchAsync } from "./../../utils/catchAsync.js";
+import * as userService from "./user.service.js";
+import response from "./../../utils/responseObject.js";
 
 export const getUserDetails = catchAsync(
   async (req: Request, res: Response) => {
@@ -15,9 +15,9 @@ export const getUserDetails = catchAsync(
         status: statusCodes.OK,
         success: true,
         data: user,
-      })
+      }),
     );
-  }
+  },
 );
 
 export const updateUserDetails = catchAsync(
@@ -33,9 +33,9 @@ export const updateUserDetails = catchAsync(
         status: statusCodes.OK,
         success: true,
         data: user,
-      })
+      }),
     );
-  }
+  },
 );
 
 export const searchUsers = catchAsync(async (req: Request, res: Response) => {
@@ -50,6 +50,6 @@ export const searchUsers = catchAsync(async (req: Request, res: Response) => {
       status: statusCodes.OK,
       success: true,
       data: users,
-    })
+    }),
   );
 });

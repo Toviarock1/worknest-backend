@@ -1,14 +1,12 @@
 {
-  "compilerOptions":  {
+"compilerOptions": {
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "baseUrl": "src",
+    "target": "ES2022",
     "outDir": "dist",
-    "sourceMap":true,
-    "noImplicitAny": true,
-    "target": "ESNext",
+    "rootDir": "src",
     "esModuleInterop": true,
-       "skipLibCheck": true
+    "skipLibCheck": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.test.ts"]

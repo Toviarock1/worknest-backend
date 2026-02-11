@@ -1,11 +1,11 @@
-import statusCodes from "./../../constants/statusCodes";
-import prisma from "./../../config/db";
-import { AppError } from "./../../utils/AppError";
+import statusCodes from "./../../constants/statusCodes.js";
+import prisma from "./../../config/db.js";
+import { AppError } from "./../../utils/AppError.js";
 import {
   ensureIsProjectOwner,
   ensureProjectExist,
   ensureUserExist,
-} from "utils/permissions";
+} from "./../../utils/permissions.js";
 
 async function create(name: string, ownerId: string) {
   const existingProject = await prisma.project.findFirst({

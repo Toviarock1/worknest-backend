@@ -1,9 +1,9 @@
-import prisma from "./../../config/db";
+import prisma from "./../../config/db.js";
 import bcrypt from "bcrypt";
-import { env } from "config/env";
+import { env } from "./../../config/env.js";
 import jwt, { Secret } from "jsonwebtoken";
-import { AppError } from "./../../utils/AppError";
-import statusCodes from "./../../constants/statusCodes";
+import { AppError } from "./../../utils/AppError.js";
+import statusCodes from "./../../constants/statusCodes.js";
 
 async function register(payload: {
   name: string;

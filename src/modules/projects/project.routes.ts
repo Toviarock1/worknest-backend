@@ -7,10 +7,10 @@ import {
   removeMember,
   update,
   userProjects,
-} from "./project.controller";
-import authMiddleware from "./../../middlewares/auth.middleware";
-import { validate } from "./../../middlewares/validation.middleware";
-import { MemberSchema, createSchema, updateSchema } from "./project.schema";
+} from "./project.controller.js";
+import authMiddleware from "./../../middlewares/auth.middleware.js";
+import { validate } from "./../../middlewares/validation.middleware.js";
+import { MemberSchema, createSchema, updateSchema } from "./project.schema.js";
 
 const router = Router();
 

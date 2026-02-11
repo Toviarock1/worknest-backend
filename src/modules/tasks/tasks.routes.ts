@@ -1,18 +1,18 @@
 import { Router } from "express";
-import authMiddleware from "./../../middlewares/auth.middleware";
-import { validate } from "./../../middlewares/validation.middleware";
+import authMiddleware from "./../../middlewares/auth.middleware.js";
+import { validate } from "./../../middlewares/validation.middleware.js";
 import {
   assignTaskSchema,
   createTaskSchema,
   updateStatusSchema,
-} from "./tasks.schema";
+} from "./tasks.schema.js";
 import {
   assignTask,
   create,
   deleteTask,
   listProjectTasks,
   updateStatus,
-} from "./tasks.controller";
+} from "./tasks.controller.js";
 
 const router = Router();
 
@@ -22,14 +22,14 @@ router.patch(
   "/:taskId",
   authMiddleware,
   validate(updateStatusSchema),
-  updateStatus
+  updateStatus,
 );
 router.delete("/:taskId", authMiddleware, deleteTask);
 router.patch(
   "/:taskId/assign",
   validate(assignTaskSchema),
   authMiddleware,
-  assignTask
+  assignTask,
 );
 
 export default router;

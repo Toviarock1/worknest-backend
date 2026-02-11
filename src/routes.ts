@@ -1,12 +1,12 @@
 import { Router } from "express";
-import authRoutes from "./modules/auth/auth.routes";
-import projectRoutes from "./modules/projects/project.routes";
-import taskRoutes from "./modules/tasks/tasks.routes";
-import userRoutes from "./modules/user/user.routes";
-import messageRoutes from "./modules/messages/messages.routes";
-import fileRoutes from "./modules/file/file.routes";
-import statusCodes from "./constants/statusCodes";
-import response from "./utils/responseObject";
+import authRoutes from "./modules/auth/auth.routes.js";
+import projectRoutes from "./modules/projects/project.routes.js";
+import taskRoutes from "./modules/tasks/tasks.routes.js";
+import userRoutes from "./modules/user/user.routes.js";
+import messageRoutes from "./modules/messages/messages.routes.js";
+import fileRoutes from "./modules/file/file.routes.js";
+import statusCodes from "./constants/statusCodes.js";
+import response from "./utils/responseObject.js";
 
 const rootRouter = Router();
 
@@ -23,7 +23,7 @@ rootRouter.use("*", (req, res) => {
       status: statusCodes.NOTFOUND,
       success: false,
       data: {},
-    })
+    }),
   );
 });
 

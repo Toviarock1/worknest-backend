@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import response from "../utils/responseObject";
+import response from "../utils/responseObject.js";
 import { z, ZodError } from "zod";
-import statusCodes from "../constants/statusCodes";
+import statusCodes from "../constants/statusCodes.js";
 
 export const validate =
   (schema: z.ZodSchema) =>
@@ -26,7 +26,7 @@ export const validate =
               path: issue.path[1], // Returns the field name (e.g., 'email')
               message: issue.message,
             })),
-          })
+          }),
         );
       }
       return res.status(statusCodes.SERVER_ERROR).json(
@@ -35,7 +35,7 @@ export const validate =
           status: statusCodes.SERVER_ERROR,
           success: false,
           data: {},
-        })
+        }),
       );
     }
   };

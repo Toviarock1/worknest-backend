@@ -3,12 +3,12 @@ import express, { Request, Response } from "express";
 import morgan from "morgan";
 import cors from "cors";
 import bodyParser from "body-parser";
-import response from "./utils/responseObject";
+import response from "./utils/responseObject.js";
 
-import errorMiddleware from "./middlewares/error.middleware";
-import statusCodes from "./constants/statusCodes";
-import { apiLimiter } from "./middlewares/rateLimit.middleware";
-import rootRouter from "./routes";
+import errorMiddleware from "./middlewares/error.middleware.js";
+import statusCodes from "./constants/statusCodes.js";
+import { apiLimiter } from "./middlewares/rateLimit.middleware.js";
+import rootRouter from "./routes.js";
 
 const app = express();
 

@@ -1,9 +1,9 @@
 import http from "http";
-import app from "./app";
-import setupMiddleware from "./startup/prod";
-import { initSocket } from "./config/socket";
-import { env } from "./config/env";
-import { configureCloudinary } from "config/cloudinary";
+import app from "./app.js";
+import setupMiddleware from "./startup/prod.js";
+import { initSocket } from "./config/socket.js";
+import { env } from "./config/env.js";
+import { configureCloudinary } from "./config/cloudinary.js";
 
 setupMiddleware(app);
 const port = env.PORT;

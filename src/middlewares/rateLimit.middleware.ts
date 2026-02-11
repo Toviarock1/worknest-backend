@@ -1,6 +1,6 @@
-import statusCodes from "../constants/statusCodes";
+import statusCodes from "../constants/statusCodes.js";
 import rateLimit from "express-rate-limit";
-import response from "../utils/responseObject";
+import response from "../utils/responseObject.js";
 
 export const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes

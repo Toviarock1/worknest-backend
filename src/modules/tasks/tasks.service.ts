@@ -4,15 +4,15 @@ import {
   ensureProjectExist,
   ensureTasksExist,
   ensureUserExist,
-} from "utils/permissions";
-import prisma from "./../../config/db";
-import statusCodes from "./../../constants/statusCodes";
-import { AppError } from "./../../utils/AppError";
-import { TaskStatus } from "../../../generated/prisma/enums";
+} from "./../../utils/permissions.js";
+import prisma from "./../../config/db.js";
+import statusCodes from "./../../constants/statusCodes.js";
+import { AppError } from "./../../utils/AppError.js";
+import { TaskStatus } from "./../../generated/prisma/enums.js";
 
 async function createTask(
   data: { title: string; projectId: string; assignedToId: string },
-  userId: string
+  userId: string,
 ) {
   await ensureIsMember(data.projectId, userId);
 
@@ -54,7 +54,7 @@ async function listTasks(projectId: string, userId: string) {
 async function updateTaskStatus(
   taskId: string,
   status: TaskStatus,
-  userId: string
+  userId: string,
 ) {
   const task = await prisma.task.findUnique({
     where: { id: taskId },
@@ -79,7 +79,7 @@ async function assignProjectTask(
   taskId: string,
   projectId: string,
   userId: string,
-  assigneeEmail: string
+  assigneeEmail: string,
 ) {
   await ensureProjectExist(projectId);
   await ensureIsMember(projectId, userId);

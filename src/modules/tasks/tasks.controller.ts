@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import statusCodes from "./../../constants/statusCodes";
-import { catchAsync } from "./../../utils/catchAsync";
-import * as taskService from "./tasks.service";
-import response from "./../../utils/responseObject";
-import { getIO } from "config/socket";
+import statusCodes from "./../../constants/statusCodes.js";
+import { catchAsync } from "./../../utils/catchAsync.js";
+import * as taskService from "./tasks.service.js";
+import response from "./../../utils/responseObject.js";
+import { getIO } from "./../../config/socket.js";
 
 export const create = catchAsync(async (req: Request, res: Response) => {
   const userId = (req as any).user.id;
@@ -19,7 +19,7 @@ export const create = catchAsync(async (req: Request, res: Response) => {
       status: statusCodes.CREATED,
       success: true,
       data: task,
-    })
+    }),
   );
 });
 
@@ -35,9 +35,9 @@ export const listProjectTasks = catchAsync(
         status: statusCodes.CREATED,
         success: true,
         data: allTasks,
-      })
+      }),
     );
-  }
+  },
 );
 
 export const updateStatus = catchAsync(async (req: Request, res: Response) => {
@@ -48,7 +48,7 @@ export const updateStatus = catchAsync(async (req: Request, res: Response) => {
   const updatedTask = await taskService.updateTaskStatus(
     taskId as string,
     status,
-    userId
+    userId,
   );
 
   const io = getIO();
@@ -60,7 +60,7 @@ export const updateStatus = catchAsync(async (req: Request, res: Response) => {
       status: statusCodes.OK,
       success: true,
       data: updatedTask,
-    })
+    }),
   );
 });
 
@@ -73,7 +73,7 @@ export const assignTask = catchAsync(async (req: Request, res: Response) => {
     taskId as string,
     projectId,
     userId,
-    assigneeEmail
+    assigneeEmail,
   );
 
   const io = getIO();
@@ -85,7 +85,7 @@ export const assignTask = catchAsync(async (req: Request, res: Response) => {
       status: statusCodes.OK,
       success: true,
       data: assignedTo,
-    })
+    }),
   );
 });
 
@@ -94,7 +94,7 @@ export const deleteTask = catchAsync(async (req: Request, res: Response) => {
   const userId = (req as any).user.id;
   const deletedTask = await taskService.deleteProjectTask(
     taskId as string,
-    userId
+    userId,
   );
   return res.status(statusCodes.OK).json(
     response({
@@ -102,6 +102,6 @@ export const deleteTask = catchAsync(async (req: Request, res: Response) => {
       status: statusCodes.OK,
       success: true,
       data: deletedTask,
-    })
+    }),
   );
 });

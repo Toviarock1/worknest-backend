@@ -1,9 +1,9 @@
 import { Response, Request, NextFunction } from "express";
-import * as projectService from "./project.service";
-import response from "./../../utils/responseObject";
-import statusCodes from "./../../constants/statusCodes";
-import { getIO } from "./../../config/socket";
-import { catchAsync } from "./../../utils/catchAsync";
+import * as projectService from "./project.service.js";
+import response from "./../../utils/responseObject.js";
+import statusCodes from "./../../constants/statusCodes.js";
+import { getIO } from "./../../config/socket.js";
+import { catchAsync } from "./../../utils/catchAsync.js";
 
 export const create = catchAsync(async (req: Request, res: Response) => {
   const { name } = req.body;

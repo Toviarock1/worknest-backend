@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import * as authService from "./auth.service";
-import statusCodes from "./../../constants/statusCodes";
-import response from "./../../utils/responseObject";
-import { catchAsync } from "./../../utils/catchAsync";
+import * as authService from "./auth.service.js";
+import statusCodes from "./../../constants/statusCodes.js";
+import response from "./../../utils/responseObject.js";
+import { catchAsync } from "./../../utils/catchAsync.js";
 
 export const register = catchAsync(async (req: Request, res: Response) => {
   const userCreated = await authService.register(req.body);

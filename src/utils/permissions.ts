@@ -1,6 +1,6 @@
-import prisma from "./../config/db";
-import statusCodes from "./../constants/statusCodes";
-import { AppError } from "./AppError";
+import prisma from "./../config/db.js";
+import statusCodes from "./../constants/statusCodes.js";
+import { AppError } from "./AppError.js";
 
 // is member
 export const ensureIsMember = async (projectId: string, userId: string) => {
@@ -18,7 +18,7 @@ export const ensureIsMember = async (projectId: string, userId: string) => {
 // is project owner
 export const ensureIsProjectOwner = async (
   projectId: string,
-  userId: string
+  userId: string,
 ) => {
   const isOwner = await prisma.project.findUnique({
     where: {
@@ -65,7 +65,7 @@ export const ensureUserExist = async (email?: string, id?: string) => {
   if (!email && !id) {
     throw new AppError(
       "User identifier required (email or id)",
-      statusCodes.BAD_REQUEST
+      statusCodes.BAD_REQUEST,
     );
   }
 

@@ -1,7 +1,7 @@
 import { Router } from "express";
-import authMiddleware from "middlewares/auth.middleware";
+import authMiddleware from "./../../middlewares/auth.middleware.js";
 import multer from "multer";
-import { deleteFile, getFilesHistory, uploadFile } from "./file.controller";
+import { deleteFile, getFilesHistory, uploadFile } from "./file.controller.js";
 
 const router = Router();
 const storage = multer.memoryStorage();

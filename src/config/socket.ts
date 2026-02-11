@@ -1,8 +1,8 @@
 import { Server } from "socket.io";
 import { Server as HttpServer } from "http";
 import jwt from "jsonwebtoken";
-import { env } from "./env";
-import prisma from "./db";
+import { env } from "./env.js";
+import prisma from "./db.js";
 
 //create a variable to hold 'io'so we can use it anywhere
 let io: Server;

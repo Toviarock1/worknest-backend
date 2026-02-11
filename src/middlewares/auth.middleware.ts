@@ -1,8 +1,8 @@
-import statusCodes from "./../constants/statusCodes";
+import statusCodes from "./../constants/statusCodes.js";
 import { NextFunction, Request, Response } from "express";
-import response from "./../utils/responseObject";
+import response from "./../utils/responseObject.js";
 import jwt from "jsonwebtoken";
-import { env } from "./../config/env";
+import { env } from "./../config/env.js";
 
 export default function (req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization;
@@ -14,7 +14,7 @@ export default function (req: Request, res: Response, next: NextFunction) {
         status: statusCodes.UNAUTHORIZED,
         success: false,
         data: {},
-      })
+      }),
     );
   }
 
@@ -34,7 +34,7 @@ export default function (req: Request, res: Response, next: NextFunction) {
           status: statusCodes.UNAUTHORIZED,
           success: false,
           data: {},
-        })
+        }),
       );
     }
 
@@ -44,7 +44,7 @@ export default function (req: Request, res: Response, next: NextFunction) {
         status: statusCodes.BAD_REQUEST,
         success: false,
         data: {},
-      })
+      }),
     );
   }
 }

@@ -1,10 +1,10 @@
-import statusCodes from "constants/statusCodes";
+import statusCodes from "./../../constants/statusCodes.js";
 import { Request, Response } from "express";
-import response from "utils/responseObject";
-import { catchAsync } from "utils/catchAsync";
-import { AppError } from "utils/AppError";
-import * as fileService from "./file.service";
-import { getIO } from "config/socket";
+import response from "./../../utils/responseObject.js";
+import { catchAsync } from "./../../utils/catchAsync.js";
+import { AppError } from "./../../utils/AppError.js";
+import * as fileService from "./file.service.js";
+import { getIO } from "./../../config/socket.js";
 
 export const uploadFile = catchAsync(async (req: Request, res: Response) => {
   const { projectId } = req.body;

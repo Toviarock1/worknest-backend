@@ -1,7 +1,7 @@
-import prisma from "config/db";
-import statusCodes from "constants/statusCodes";
-import { AppError } from "utils/AppError";
-import { ensureUserExist } from "utils/permissions";
+import prisma from "./../../config/db.js";
+import statusCodes from "./../../constants/statusCodes.js";
+import { AppError } from "./../../utils/AppError.js";
+import { ensureUserExist } from "./../../utils/permissions.js";
 import bcrypt from "bcrypt";
 
 async function userDetails(id: string) {

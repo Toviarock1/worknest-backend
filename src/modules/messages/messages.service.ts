@@ -1,5 +1,8 @@
-import prisma from "config/db";
-import { ensureIsMember, ensureProjectExist } from "utils/permissions";
+import prisma from "./../../config/db.js";
+import {
+  ensureIsMember,
+  ensureProjectExist,
+} from "./../../utils/permissions.js";
 
 async function sendMessage(projectId: string, userId: string, content: string) {
   await ensureProjectExist(projectId);

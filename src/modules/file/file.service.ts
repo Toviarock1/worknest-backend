@@ -1,9 +1,11 @@
-import { ensureIsMember, ensureProjectExist } from "utils/permissions";
-import cloudinary from "./../../config/cloudinary";
-import prisma from "config/db";
-import { AppError } from "utils/AppError";
-import statusCodes from "constants/statusCodes";
-import { split } from "lodash";
+import {
+  ensureIsMember,
+  ensureProjectExist,
+} from "./../../utils/permissions.js";
+import cloudinary from "./../../config/cloudinary.js";
+import prisma from "./../../config/db.js";
+import { AppError } from "./../../utils/AppError.js";
+import statusCodes from "./../../constants/statusCodes.js";
 
 async function uploadToCloudinary(fileBuffer: Buffer): Promise<any> {
   return new Promise((resolve, reject) => {

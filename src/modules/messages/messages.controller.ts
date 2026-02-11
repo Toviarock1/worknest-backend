@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import * as messageService from "./messages.service";
-import { getIO } from "config/socket";
-import { catchAsync } from "utils/catchAsync";
-import statusCodes from "constants/statusCodes";
-import response from "utils/responseObject";
+import * as messageService from "./messages.service.js";
+import { getIO } from "./../../config/socket.js";
+import { catchAsync } from "./../../utils/catchAsync.js";
+import statusCodes from "./../../constants/statusCodes.js";
+import response from "./../../utils/responseObject.js";
 
 export const send = catchAsync(async (req: Request, res: Response) => {
   const { projectId, content } = req.body;
