@@ -250,3 +250,5 @@
 {"ip":"::ffff:127.0.0.1","level":"warn","message":"Project not found","method":"GET","timestamp":"2026-02-10T07:37:09.188Z","url":"/api/v1/file/[object%20Object]","user":"8d90d901-0b00-441c-a979-ee895adcfa8d"}
 {"ip":"::ffff:127.0.0.1","level":"warn","message":"Project not found","method":"GET","timestamp":"2026-02-10T07:37:13.265Z","url":"/api/v1/file/[object%20Object]","user":"8d90d901-0b00-441c-a979-ee895adcfa8d"}
 {"ip":"::ffff:127.0.0.1","level":"warn","message":"Project not found","method":"GET","timestamp":"2026-02-10T07:44:53.391Z","url":"/api/v1/file/[object%20Object]","user":"8d90d901-0b00-441c-a979-ee895adcfa8d"}
+{"ip":"::1","level":"warn","message":"Invalid email/password","method":"POST","timestamp":"2026-02-11T08:31:23.163Z","url":"/api/v1/auth/login","user":"anonymous"}
+{"ip":"::1","level":"warn","message":"Invalid email/password","method":"POST","timestamp":"2026-02-11T08:31:38.349Z","url":"/api/v1/auth/login","user":"anonymous"}

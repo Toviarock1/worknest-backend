@@ -15,7 +15,7 @@ const logger = winston.createLogger({
     winston.format.timestamp(),
     errorEnumeration(), // MUST come before json()
     winston.format.errors({ stack: true }),
-    winston.format.json()
+    winston.format.json(),
   ),
   transports: [
     new winston.transports.File({ filename: "error.log", level: "error" }),
@@ -37,10 +37,10 @@ if (process.env.NODE_ENV !== "production") {
             return `${timestamp} ${level}: ${message} ${metaStr} ${
               stack ? "\n" + stack : ""
             }`;
-          }
-        )
+          },
+        ),
       ),
-    })
+    }),
   );
 }
 
@@ -48,7 +48,7 @@ export default function (
   err: any,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   const statusCode = err.statusCode || 500;
 
@@ -74,7 +74,7 @@ export default function (
       statusCode === 500 ? "Something went wrong on our end" : err.message,
     // Provide stack trace only in development
     data:
-      process.env.NODE_ENV === "development"
+      process.env.NODE_ENV === "production"
         ? { stack: err.stack, ...errorContext }
         : {},
   });
