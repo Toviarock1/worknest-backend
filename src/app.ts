@@ -19,6 +19,7 @@ app.use(
   }),
 );
 app.use(bodyParser.json());
+app.set("trust proxy", 1);
 app.use(apiLimiter);
 app.use(
   morgan("combined", {
