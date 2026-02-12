@@ -52,6 +52,8 @@ export default function (
 ) {
   const statusCode = err.statusCode || 500;
 
+  console.error("🔥 SYSTEM ERROR:", err);
+
   // Add more context: who, where, and what
   const errorContext = {
     method: req.method,
@@ -74,7 +76,7 @@ export default function (
       statusCode === 500 ? "Something went wrong on our end" : err.message,
     // Provide stack trace only in development
     data:
-      process.env.NODE_ENV === "production"
+      process.env.NODE_ENV === "development"
         ? { stack: err.stack, ...errorContext }
         : {},
   });
