@@ -107,14 +107,15 @@ WorkNest-Backend/
 
 ### Projects (`/api/v1/project`)
 
-| Method | Endpoint               | Description             |
-| ------ | ---------------------- | ----------------------- |
-| POST   | `/project`             | Create a new project    |
-| GET    | `/project`             | Get all user's projects |
-| GET    | `/project/:id/members` | Get project members     |
-| POST   | `/project/add-member`  | Add member to project   |
-| PATCH  | `/project/:id`         | Update project details  |
-| DELETE | `/project/:id`         | Delete project          |
+| Method | Endpoint                 | Description                |
+| ------ | ------------------------ | -------------------------- |
+| POST   | `/project`               | Create a new project       |
+| GET    | `/project`               | Get all user's projects    |
+| GET    | `/project/:id/members`   | Get project members        |
+| POST   | `/project/add-member`    | Add member to project      |
+| POST   | `/project/remove-member` | Remove member from project |
+| PATCH  | `/project/:id`           | Update project details     |
+| DELETE | `/project/:id`           | Delete project             |
 
 ### Tasks (`/api/v1/tasks`)
 
@@ -139,8 +140,27 @@ WorkNest-Backend/
 | ------ | ------------------ | ----------------- |
 | POST   | `/file/upload`     | Upload a file     |
 | GET    | `/file/:projectId` | Get project files |
+| DELETE | `/file/:fileId`    | Delete a file     |
 
 ## 🔌 Socket.io Events
+
+### Authentication
+
+Socket.io connections require JWT authentication. Pass the JWT token in the handshake query or headers:
+
+```javascript
+const socket = io("http://localhost:5050", {
+  query: { token: "your-jwt-token" },
+});
+```
+
+Or in headers:
+
+```javascript
+const socket = io("http://localhost:5050", {
+  extraHeaders: { token: "your-jwt-token" },
+});
+```
 
 ### Client → Server
 
@@ -271,6 +291,11 @@ WorkNest-Backend/
 6. **Start the development server**
 
    ```bash
+   # Development mode (with hot reload)
+   npm run dev
+
+   # Or build and run production server
+   npm run build
    npm start
    ```
 
@@ -278,15 +303,18 @@ WorkNest-Backend/
 
 ### Available Scripts
 
-| Script                | Description                           |
-| --------------------- | ------------------------------------- |
-| `npm start`           | Start development server with nodemon |
-| `npm run db:migrate`  | Run Prisma migrations                 |
-| `npm run db:generate` | Generate Prisma client                |
-| `npm run db:setup`    | Run migrations and generate client    |
-| `npm run db:view`     | Open Prisma Studio                    |
-| `npm run dock:start`  | Start Docker containers               |
-| `npm run dock:stop`   | Stop Docker containers                |
+| Script                | Description                        |
+| --------------------- | ---------------------------------- |
+| `npm run dev`         | Start development server with tsx  |
+| `npm run build`       | Build for production               |
+| `npm run start`       | Start production server            |
+| `npm run db:migrate`  | Run Prisma migrations              |
+| `npm run db:push`     | Push schema to database            |
+| `npm run db:generate` | Generate Prisma client             |
+| `npm run db:setup`    | Run migrations and generate client |
+| `npm run db:view`     | Open Prisma Studio                 |
+| `npm run dock:start`  | Start Docker containers            |
+| `npm run dock:stop`   | Stop Docker containers             |
 
 ## 🔐 Security Features
 
