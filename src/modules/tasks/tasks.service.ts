@@ -11,7 +11,12 @@ import { AppError } from "./../../utils/AppError.js";
 import { TaskStatus } from "./../../generated/prisma/enums.js";
 
 async function createTask(
-  data: { title: string; projectId: string; assignedToId: string },
+  data: {
+    title: string;
+    projectId: string;
+    assignedToId: string;
+    description: string;
+  },
   userId: string,
 ) {
   await ensureIsMember(data.projectId, userId);
@@ -21,6 +26,7 @@ async function createTask(
       title: data.title,
       projectId: data.projectId,
       assignedToId: data.assignedToId,
+      description: data.description,
     },
     include: {
       assignedTo: {
