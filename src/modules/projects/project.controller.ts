@@ -6,10 +6,10 @@ import { getIO } from "./../../config/socket.js";
 import { catchAsync } from "./../../utils/catchAsync.js";
 
 export const create = catchAsync(async (req: Request, res: Response) => {
-  const { name } = req.body;
+  const { name, description } = req.body;
   const { id: ownerId } = (req as any).user;
 
-  const project = await projectService.create(name, ownerId);
+  const project = await projectService.create(name, description, ownerId);
 
   return res.status(statusCodes.CREATED).json(
     response({
