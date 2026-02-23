@@ -7,7 +7,7 @@ import {
   ensureUserExist,
 } from "./../../utils/permissions.js";
 
-async function create(name: string, ownerId: string) {
+async function create(name: string, description: string, ownerId: string) {
   const existingProject = await prisma.project.findFirst({
     where: {
       ownerId: ownerId,
@@ -20,7 +20,7 @@ async function create(name: string, ownerId: string) {
 
   return await prisma.$transaction(async (tx) => {
     const project = await tx.project.create({
-      data: { name, ownerId: ownerId },
+      data: { name, description, ownerId: ownerId },
     });
 
     await tx.projectMember.create({
