@@ -45,7 +45,17 @@ async function listTasks(projectId: string, userId: string) {
       id: projectId,
     },
     include: {
-      tasks: true,
+      tasks: {
+        include: {
+          assignedTo: {
+            select: {
+              name: true,
+              email: true,
+              id: true,
+            },
+          },
+        },
+      },
     },
   });
 
