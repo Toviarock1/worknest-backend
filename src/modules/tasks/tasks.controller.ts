@@ -42,12 +42,12 @@ export const listProjectTasks = catchAsync(
 
 export const updateStatus = catchAsync(async (req: Request, res: Response) => {
   const { taskId } = req.params;
-  const { status } = req.body;
+  const { status, title, description } = req.body;
   const userId = (req as any).user.id;
 
   const updatedTask = await taskService.updateTaskStatus(
     taskId as string,
-    status,
+    { status, title, description },
     userId,
   );
 

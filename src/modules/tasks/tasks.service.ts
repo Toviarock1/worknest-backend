@@ -69,7 +69,11 @@ async function listTasks(projectId: string, userId: string) {
 
 async function updateTaskStatus(
   taskId: string,
-  status: TaskStatus,
+  updates: {
+    status?: TaskStatus;
+    title?: string;
+    description?: string;
+  },
   userId: string,
 ) {
   const task = await prisma.task.findUnique({
@@ -81,11 +85,14 @@ async function updateTaskStatus(
 
   await ensureIsMember(task.projectId, userId);
 
+  const data: Record<string, unknown> = {};
+  if (updates.status !== undefined) data.status = updates.status;
+  if (updates.title !== undefined) data.title = updates.title;
+  if (updates.description !== undefined) data.description = updates.description;
+
   const updatedTaskStats = await prisma.task.update({
     where: { id: taskId },
-    data: {
-      status,
-    },
+    data,
   });
 
   return { ...updatedTaskStats, projectId: task.projectId };
