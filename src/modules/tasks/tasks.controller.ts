@@ -96,6 +96,10 @@ export const deleteTask = catchAsync(async (req: Request, res: Response) => {
     taskId as string,
     userId,
   );
+
+  const io = getIO();
+  io.to(deletedTask.projectId).emit("task_deleted", deletedTask);
+
   return res.status(statusCodes.OK).json(
     response({
       message: "Tasks deleted successfully",

@@ -85,6 +85,12 @@ async function updateTaskStatus(
 
   await ensureIsMember(task.projectId, userId);
 
+  const editingContent =
+    updates.title !== undefined || updates.description !== undefined;
+  if (editingContent) {
+    await ensureIsProjectOwner(task.projectId, userId);
+  }
+
   const data: Record<string, unknown> = {};
   if (updates.status !== undefined) data.status = updates.status;
   if (updates.title !== undefined) data.title = updates.title;
@@ -127,6 +133,8 @@ async function deleteProjectTask(taskId: string, userId: string) {
     where: { id: taskId },
     select: { projectId: true },
   });
+
+  if (!task) throw new AppError("Task not found", statusCodes.NOTFOUND);
 
   await ensureIsProjectOwner(task.projectId, userId);
 
