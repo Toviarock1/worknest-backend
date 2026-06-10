@@ -149,7 +149,10 @@ async function listProjectMembers(id: string, userId: string) {
 }
 
 async function listAllUserProjects(userId: string) {
-  const userProjects = await prisma.projectMember.findMany({
+  // Empty list is a valid state for new users — return [] instead of throwing.
+  // The frontend distinguishes "no projects" from "request failed" by the
+  // length of data, not by HTTP status.
+  return prisma.projectMember.findMany({
     where: {
       userId: userId,
     },
@@ -157,14 +160,6 @@ async function listAllUserProjects(userId: string) {
       project: true,
     },
   });
-
-  if (userProjects.length <= 0)
-    throw new AppError(
-      "User is not a member of any project",
-      statusCodes.NOTFOUND,
-    );
-
-  return userProjects;
 }
 
 export {
