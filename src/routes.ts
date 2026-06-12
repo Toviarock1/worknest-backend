@@ -5,6 +5,7 @@ import taskRoutes from "./modules/tasks/tasks.routes.js";
 import userRoutes from "./modules/user/user.routes.js";
 import messageRoutes from "./modules/messages/messages.routes.js";
 import fileRoutes from "./modules/file/file.routes.js";
+import commentRoutes from "./modules/comments/comments.routes.js";
 import statusCodes from "./constants/statusCodes.js";
 import response from "./utils/responseObject.js";
 
@@ -16,6 +17,7 @@ rootRouter.use("/tasks", taskRoutes);
 rootRouter.use("/user", userRoutes);
 rootRouter.use("/message", messageRoutes);
 rootRouter.use("/file", fileRoutes);
+rootRouter.use("/comments", commentRoutes);
 rootRouter.use("*", (req, res) => {
   res.status(statusCodes.NOTFOUND).json(
     response({
