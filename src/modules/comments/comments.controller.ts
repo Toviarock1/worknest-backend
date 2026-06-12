@@ -4,6 +4,7 @@ import { catchAsync } from "./../../utils/catchAsync.js";
 import response from "./../../utils/responseObject.js";
 import { getIO } from "./../../config/socket.js";
 import * as commentsService from "./comments.service.js";
+import { resolveMentionsForProject } from "./../../utils/mentions.js";
 
 export const list = catchAsync(async (req: Request, res: Response) => {
   const { taskId } = req.params;
@@ -32,9 +33,22 @@ export const create = catchAsync(async (req: Request, res: Response) => {
     content,
   );
 
-  getIO()
-    .to(projectId)
-    .emit("comment_created", { taskId, comment });
+  const io = getIO();
+  io.to(projectId).emit("comment_created", { taskId, comment });
+
+  // Notify mentioned project members.
+  const mentions = await resolveMentionsForProject(content, projectId);
+  for (const m of mentions) {
+    if (m.userId === userId) continue; // don't ping yourself
+    io.to(m.userId).emit("mention", {
+      source: "comment",
+      projectId,
+      taskId,
+      commentId: comment.id,
+      excerpt: content.slice(0, 200),
+      from: { id: userId, name: (req as any).user.name ?? null },
+    });
+  }
 
   return res.status(statusCodes.CREATED).json(
     response({

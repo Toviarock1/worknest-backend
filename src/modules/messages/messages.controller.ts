@@ -4,6 +4,7 @@ import { getIO } from "./../../config/socket.js";
 import { catchAsync } from "./../../utils/catchAsync.js";
 import statusCodes from "./../../constants/statusCodes.js";
 import response from "./../../utils/responseObject.js";
+import { resolveMentionsForProject } from "./../../utils/mentions.js";
 
 export const send = catchAsync(async (req: Request, res: Response) => {
   const { projectId, content } = req.body;
@@ -13,6 +14,19 @@ export const send = catchAsync(async (req: Request, res: Response) => {
 
   const io = getIO();
   io.to(projectId).emit("new_message", message);
+
+  // Notify mentioned project members in personal rooms.
+  const mentions = await resolveMentionsForProject(content, projectId);
+  for (const m of mentions) {
+    if (m.userId === userId) continue;
+    io.to(m.userId).emit("mention", {
+      source: "message",
+      projectId,
+      messageId: message.id,
+      excerpt: content.slice(0, 200),
+      from: { id: userId, name: (req as any).user.name ?? null },
+    });
+  }
 
   return res.status(statusCodes.CREATED).json(
     response({
