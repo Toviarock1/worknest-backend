@@ -6,6 +6,7 @@ export const createTaskSchema = z.object({
     projectId: z.uuid("Invalid project ID"),
     assignedToId: z.uuid().optional(),
     status: z.enum(["todo", "in_progress", "done"]).default("todo"),
+    parentId: z.uuid().optional(),
   }),
 });
 

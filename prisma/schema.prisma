@@ -36,6 +36,7 @@ model User {
   messages       Message[]
   files          File[]
   taskComments   TaskComment[]
+  reactions      MessageReaction[]
 
   createdAt DateTime @default(now())
 }
@@ -78,13 +79,46 @@ model Task {
 
   projectId    String
   assignedToId String?
+  parentId     String?
 
   project    Project       @relation(fields: [projectId], references: [id])
   assignedTo User?         @relation(fields: [assignedToId], references: [id])
   comments   TaskComment[]
+  files      File[]
+
+  parent   Task?  @relation("TaskSubtasks", fields: [parentId], references: [id], onDelete: Cascade)
+  subtasks Task[] @relation("TaskSubtasks")
+
+  outgoingLinks TaskLink[] @relation("TaskLinkFrom")
+  incomingLinks TaskLink[] @relation("TaskLinkTo")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([projectId, parentId])
+}
+
+enum TaskLinkType {
+  blocks
+  blocked_by
+  related_to
+}
+
+model TaskLink {
+  id           String       @id @default(uuid())
+  fromTaskId   String
+  toTaskId     String
+  type         TaskLinkType
+  createdById  String?
+
+  fromTask    Task @relation("TaskLinkFrom", fields: [fromTaskId], references: [id], onDelete: Cascade)
+  toTask      Task @relation("TaskLinkTo", fields: [toTaskId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([fromTaskId, toTaskId, type])
+  @@index([fromTaskId])
+  @@index([toTaskId])
 }
 
 model TaskComment {
@@ -109,10 +143,26 @@ model Message {
   projectId String
   senderId  String
 
-  project Project @relation(fields: [projectId], references: [id])
-  sender  User    @relation(fields: [senderId], references: [id])
+  project   Project           @relation(fields: [projectId], references: [id])
+  sender    User              @relation(fields: [senderId], references: [id])
+  reactions MessageReaction[]
 
   createdAt DateTime @default(now())
+}
+
+model MessageReaction {
+  id        String @id @default(uuid())
+  messageId String
+  userId    String
+  emoji     String
+
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([messageId, userId, emoji])
+  @@index([messageId])
 }
 
 model File {
@@ -123,9 +173,13 @@ model File {
 
   projectId  String
   uploaderId String
+  taskId     String?
 
   project  Project @relation(fields: [projectId], references: [id])
   uploader User    @relation(fields: [uploaderId], references: [id])
+  task     Task?   @relation(fields: [taskId], references: [id], onDelete: SetNull)
 
   createdAt DateTime @default(now())
+
+  @@index([taskId])
 }

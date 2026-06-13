@@ -30,9 +30,23 @@ async function saveFileRecord(
   name: string,
   url: string,
   size: number,
+  taskId?: string,
 ) {
   await ensureProjectExist(projectId);
   await ensureIsMember(projectId, userId);
+
+  if (taskId) {
+    const task = await prisma.task.findUnique({
+      where: { id: taskId },
+      select: { projectId: true },
+    });
+    if (!task || task.projectId !== projectId) {
+      throw new AppError(
+        "Task does not belong to this project",
+        statusCodes.BAD_REQUEST,
+      );
+    }
+  }
 
   return await prisma.file.create({
     data: {
@@ -41,6 +55,7 @@ async function saveFileRecord(
       name,
       url,
       size,
+      taskId: taskId ?? null,
     },
   });
 }
@@ -69,8 +84,10 @@ async function getProjectFiles(projectId: string, userId: string) {
   await ensureProjectExist(projectId);
   await ensureIsMember(projectId, userId);
 
+  // Chat tab only shows files shared in chat (taskId === null). Task attachments
+  // surface in their own task panel, not in the shared chat feed.
   return await prisma.file.findMany({
-    where: { projectId },
+    where: { projectId, taskId: null },
     include: { uploader: { select: { name: true } } },
     orderBy: {
       createdAt: "asc",

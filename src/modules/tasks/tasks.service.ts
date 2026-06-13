@@ -14,12 +14,28 @@ async function createTask(
   data: {
     title: string;
     projectId: string;
-    assignedToId: string;
-    description: string;
+    assignedToId?: string;
+    description?: string;
+    parentId?: string;
   },
   userId: string,
 ) {
   await ensureIsMember(data.projectId, userId);
+
+  // If a parent is provided, make sure it belongs to the same project to avoid
+  // cross-project orphan trees.
+  if (data.parentId) {
+    const parent = await prisma.task.findUnique({
+      where: { id: data.parentId },
+      select: { projectId: true },
+    });
+    if (!parent || parent.projectId !== data.projectId) {
+      throw new AppError(
+        "Parent task does not belong to this project",
+        statusCodes.BAD_REQUEST,
+      );
+    }
+  }
 
   return await prisma.task.create({
     data: {
@@ -27,6 +43,7 @@ async function createTask(
       projectId: data.projectId,
       assignedToId: data.assignedToId,
       description: data.description,
+      parentId: data.parentId,
     },
     include: {
       assignedTo: {
@@ -40,6 +57,8 @@ async function createTask(
 }
 
 async function listTasks(projectId: string, userId: string) {
+  await ensureIsMember(projectId, userId);
+
   const projectTasks = await prisma.project.findUnique({
     where: {
       id: projectId,
@@ -54,6 +73,28 @@ async function listTasks(projectId: string, userId: string) {
               id: true,
             },
           },
+          // Subtasks for inline progress on the kanban card; minimal fields.
+          subtasks: {
+            select: { id: true, title: true, status: true },
+            orderBy: { createdAt: "asc" },
+          },
+          files: {
+            select: { id: true, name: true, url: true, size: true },
+          },
+          outgoingLinks: {
+            select: {
+              id: true,
+              type: true,
+              toTask: { select: { id: true, title: true, status: true } },
+            },
+          },
+          incomingLinks: {
+            select: {
+              id: true,
+              type: true,
+              fromTask: { select: { id: true, title: true, status: true } },
+            },
+          },
         },
       },
     },
@@ -61,8 +102,6 @@ async function listTasks(projectId: string, userId: string) {
 
   if (!projectTasks)
     throw new AppError("Project not found", statusCodes.NOTFOUND);
-
-  await ensureIsMember(projectId, userId);
 
   return projectTasks;
 }

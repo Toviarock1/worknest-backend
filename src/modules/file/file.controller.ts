@@ -7,7 +7,7 @@ import * as fileService from "./file.service.js";
 import { getIO } from "./../../config/socket.js";
 
 export const uploadFile = catchAsync(async (req: Request, res: Response) => {
-  const { projectId } = req.body;
+  const { projectId, taskId } = req.body;
   const userId = (req as any).user.id;
   const file = req.file;
 
@@ -21,10 +21,17 @@ export const uploadFile = catchAsync(async (req: Request, res: Response) => {
     file.originalname,
     cloudResponse.secure_url,
     file.size,
+    taskId || undefined,
   );
 
   const io = getIO();
-  io.to(projectId).emit("new_file", fileUpload);
+  // Chat feed only cares about untagged uploads; task attachments emit their own
+  // event so the task panel can patch its cache.
+  if (taskId) {
+    io.to(projectId).emit("task_file_added", { taskId, file: fileUpload });
+  } else {
+    io.to(projectId).emit("new_file", fileUpload);
+  }
 
   return res.status(statusCodes.CREATED).json(
     response({

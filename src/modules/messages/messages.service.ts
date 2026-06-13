@@ -34,6 +34,9 @@ async function getProjectChat(projectId: string, userId: string) {
           name: true,
         },
       },
+      reactions: {
+        select: { emoji: true, userId: true },
+      },
     },
     orderBy: {
       createdAt: "asc",
