@@ -20,7 +20,10 @@ const handleUploadErrors = (
   res: Response,
   next: NextFunction,
 ) => {
-  if (err instanceof multer.MulterError && err.code === "LIMIT_FILE_SIZE") {
+  if (
+    err instanceof multer.MulterError &&
+    (err as { code?: string }).code === "LIMIT_FILE_SIZE"
+  ) {
     return res.status(statusCodes.BAD_REQUEST).json(
       response({
         message: "File too large — max 5 MB",
