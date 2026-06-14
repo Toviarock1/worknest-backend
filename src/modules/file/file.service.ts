@@ -2,26 +2,56 @@ import {
   ensureIsMember,
   ensureProjectExist,
 } from "./../../utils/permissions.js";
-import cloudinary from "./../../config/cloudinary.js";
+import supabase, { STORAGE_BUCKET } from "./../../config/supabase.js";
+import { randomUUID } from "node:crypto";
+import path from "node:path";
 import prisma from "./../../config/db.js";
 import { AppError } from "./../../utils/AppError.js";
 import statusCodes from "./../../constants/statusCodes.js";
 
-async function uploadToCloudinary(fileBuffer: Buffer): Promise<any> {
-  return new Promise((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream(
-      {
-        folder: "worknest_files",
-        resource_type: "auto",
-        access_mode: "public",
-      },
-      (error, result) => {
-        if (error) reject(error);
-        else resolve(result);
-      },
+export interface UploadedAsset {
+  /** Path inside the bucket — kept on the row so we can delete later. */
+  storagePath: string;
+  /** Public URL for direct download / embed. */
+  publicUrl: string;
+}
+
+/**
+ * Upload a buffer to Supabase Storage. Returns the storage path (for future
+ * deletes) and the public URL (for the DB and the frontend).
+ *
+ * `projectId` is folded into the storage path so files cluster per-project,
+ * and the filename is a UUID to avoid collisions / path-traversal abuse.
+ */
+async function uploadToSupabase(
+  fileBuffer: Buffer,
+  originalName: string,
+  mimeType: string | undefined,
+  projectId: string,
+): Promise<UploadedAsset> {
+  const ext = path.extname(originalName).toLowerCase().slice(0, 12); // cap ext length
+  const safeId = randomUUID();
+  const storagePath = `${projectId}/${safeId}${ext}`;
+
+  const { error } = await supabase.storage
+    .from(STORAGE_BUCKET)
+    .upload(storagePath, fileBuffer, {
+      contentType: mimeType || "application/octet-stream",
+      upsert: false,
+    });
+
+  if (error) {
+    throw new AppError(
+      `Storage upload failed: ${error.message}`,
+      statusCodes.SERVER_ERROR,
     );
-    uploadStream.end(fileBuffer);
-  });
+  }
+
+  const { data } = supabase.storage
+    .from(STORAGE_BUCKET)
+    .getPublicUrl(storagePath);
+
+  return { storagePath, publicUrl: data.publicUrl };
 }
 
 async function saveFileRecord(
@@ -69,9 +99,21 @@ async function deleteFile(fileId: string, userId: string) {
 
   if (!file) throw new AppError("File not found", statusCodes.NOTFOUND);
 
-  const publicId = file.url.split("/").pop()?.split(".")[0];
-
-  if (publicId) await cloudinary.uploader.destroy(`worknest_files/${publicId}`);
+  // Pull the path back out of the public URL. Public Supabase URLs end with
+  // `/storage/v1/object/public/<bucket>/<path…>`. We slice everything after
+  // the bucket segment.
+  const marker = `/storage/v1/object/public/${STORAGE_BUCKET}/`;
+  const idx = file.url.indexOf(marker);
+  if (idx >= 0) {
+    const storagePath = decodeURIComponent(file.url.slice(idx + marker.length));
+    const { error } = await supabase.storage
+      .from(STORAGE_BUCKET)
+      .remove([storagePath]);
+    // Don't block DB cleanup on a storage failure — log it but proceed.
+    if (error) {
+      console.warn(`Supabase remove failed for ${storagePath}: ${error.message}`);
+    }
+  }
 
   return await prisma.file.delete({
     where: {
@@ -96,4 +138,4 @@ async function getProjectFiles(projectId: string, userId: string) {
   });
 }
 
-export { uploadToCloudinary, saveFileRecord, getProjectFiles, deleteFile };
+export { uploadToSupabase, saveFileRecord, getProjectFiles, deleteFile };

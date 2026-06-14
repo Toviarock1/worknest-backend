@@ -13,13 +13,18 @@ export const uploadFile = catchAsync(async (req: Request, res: Response) => {
 
   if (!file) throw new AppError("No file uploaded", statusCodes.BAD_REQUEST);
 
-  const cloudResponse = await fileService.uploadToCloudinary(file.buffer);
+  const uploaded = await fileService.uploadToSupabase(
+    file.buffer,
+    file.originalname,
+    file.mimetype,
+    projectId,
+  );
 
   const fileUpload = await fileService.saveFileRecord(
     projectId,
     userId,
     file.originalname,
-    cloudResponse.secure_url,
+    uploaded.publicUrl,
     file.size,
     taskId || undefined,
   );

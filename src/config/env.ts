@@ -10,9 +10,9 @@ const envSchema = z.object({
   DIRECT_URL: z.url(),
   JWT_SECRET: z.string().min(32),
   JWT_EXPIRES_IN: z.string().min(2).max(3),
-  CLOUDINARY_CLOUD_NAME: z.string(),
-  CLOUDINARY_API_KEY: z.string(),
-  CLOUDINARY_API_SECRET: z.string(),
+  SUPABASE_URL: z.url(),
+  SUPABASE_SERVICE_ROLE_KEY: z.string().min(20),
+  SUPABASE_STORAGE_BUCKET: z.string().default("worknest-files"),
 });
 
 const _env = envSchema.safeParse(process.env);
