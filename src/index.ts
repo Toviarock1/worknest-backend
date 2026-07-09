@@ -1,3 +1,7 @@
+// Init Sentry first so any throw during module load is captured.
+import { initSentry } from "./config/sentry.js";
+initSentry();
+
 import http from "http";
 import app from "./app.js";
 import setupMiddleware from "./startup/prod.js";

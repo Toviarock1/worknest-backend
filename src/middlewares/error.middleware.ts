@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import winston from "winston";
+import { Sentry } from "../config/sentry.js";
 
 // Custom format to ensure error details are visible to Winston
 const errorEnumeration = winston.format((info) => {
@@ -65,6 +66,12 @@ export default function (
 
   if (statusCode >= 500) {
     logger.error(err.message, { ...errorContext, stack: err.stack });
+    // Send to Sentry with request context so we can see *who* hit *what*.
+    Sentry.withScope((scope) => {
+      scope.setUser({ id: errorContext.user });
+      scope.setContext("request", errorContext);
+      Sentry.captureException(err);
+    });
   } else {
     logger.warn(err.message, errorContext);
   }

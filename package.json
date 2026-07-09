@@ -18,6 +18,8 @@
     "db:setup": "dotenv -e .env.local -- prisma migrate dev && prisma generate",
     "db:view": "dotenv -e .env.local -- prisma studio",
     "db:view:cloud": "dotenv -e .env.cloud -- prisma studio",
+    "db:seed": "dotenv -e .env.local -- tsx prisma/seed.ts",
+    "db:seed:cloud": "dotenv -e .env.cloud -- tsx prisma/seed.ts",
     "dock:start": "docker compose up -d",
     "dock:stop": "docker compose stop",
     "test": "echo \"Error: no test specified\" && exit 1"

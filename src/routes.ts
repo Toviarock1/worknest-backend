@@ -22,6 +22,7 @@ rootRouter.use("/file", fileRoutes);
 rootRouter.use("/comments", commentRoutes);
 rootRouter.use("/reactions", reactionRoutes);
 rootRouter.use("/task-links", taskLinkRoutes);
+
 rootRouter.use("*", (req, res) => {
   res.status(statusCodes.NOTFOUND).json(
     response({

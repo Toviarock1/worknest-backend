@@ -13,6 +13,12 @@ const envSchema = z.object({
   SUPABASE_URL: z.url(),
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(20),
   SUPABASE_STORAGE_BUCKET: z.string().default("worknest-files"),
+
+  // Observability — Sentry is optional so local dev keeps running without
+  // configuring it. If the DSN is absent, the SDK init is skipped.
+  SENTRY_DSN: z.string().optional(),
+  SENTRY_TRACES_SAMPLE_RATE: z.coerce.number().min(0).max(1).default(0.1),
+  SENTRY_PROFILES_SAMPLE_RATE: z.coerce.number().min(0).max(1).default(0.1),
 });
 
 const _env = envSchema.safeParse(process.env);
