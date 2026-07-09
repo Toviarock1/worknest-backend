@@ -12,6 +12,7 @@ dist/
 # Local env files
 .env
 .env.local
+.env.cloud
 
 # Logs
 npm-debug.log*

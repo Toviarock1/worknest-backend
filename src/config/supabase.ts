@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import ws from "ws";
 import { env } from "./env.js";
 
 // Server-side client using the service role key. Never expose this key to
@@ -8,6 +9,7 @@ const supabase = createClient(
   env.SUPABASE_SERVICE_ROLE_KEY,
   {
     auth: { persistSession: false },
+    realtime: { transport: ws as unknown as typeof WebSocket },
   },
 );
 
