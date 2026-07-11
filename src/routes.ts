@@ -10,8 +10,24 @@ import reactionRoutes from "./modules/reactions/reactions.routes.js";
 import taskLinkRoutes from "./modules/taskLinks/taskLinks.routes.js";
 import statusCodes from "./constants/statusCodes.js";
 import response from "./utils/responseObject.js";
+import prisma from "./config/db.js";
 
 const rootRouter = Router();
+
+// Keep-alive: touches the database so Supabase's free-tier inactivity
+// pause never kicks in. Point an uptime pinger (cron-job.org, UptimeRobot,
+// GitHub Actions cron…) at GET /health every few hours.
+rootRouter.get("/health", async (_req, res) => {
+  await prisma.$queryRaw`SELECT 1`;
+  res.status(statusCodes.OK).json(
+    response({
+      message: "Database is reachable.",
+      status: statusCodes.OK,
+      success: true,
+      data: { db: "up", timestamp: new Date().toISOString() },
+    }),
+  );
+});
 
 rootRouter.use("/auth", authRoutes);
 rootRouter.use("/project", projectRoutes);
