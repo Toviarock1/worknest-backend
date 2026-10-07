@@ -15,7 +15,7 @@ async function sendMessage(projectId: string, userId: string, content: string) {
       content,
     },
     include: {
-      sender: { select: { name: true, email: true } },
+      sender: { select: { name: true, email: true, avatarUrl: true } },
     },
   });
 }
@@ -32,6 +32,7 @@ async function getProjectChat(projectId: string, userId: string) {
       sender: {
         select: {
           name: true,
+          avatarUrl: true,
         },
       },
       reactions: {

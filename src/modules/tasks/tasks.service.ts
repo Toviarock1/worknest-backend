@@ -71,6 +71,7 @@ async function listTasks(projectId: string, userId: string) {
               name: true,
               email: true,
               id: true,
+              avatarUrl: true,
             },
           },
           // Subtasks for inline progress on the kanban card; minimal fields.
