@@ -266,3 +266,8 @@
 {"ip":"::ffff:127.0.0.1","level":"warn","message":"Invalid email/password","method":"POST","timestamp":"2026-10-07T12:55:15.767Z","url":"/api/v1/auth/login","user":"anonymous"}
 {"ip":"::ffff:127.0.0.1","level":"warn","message":"Invalid email/password","method":"POST","timestamp":"2026-10-07T12:55:58.962Z","url":"/api/v1/auth/login","user":"anonymous"}
 {"ip":"::ffff:127.0.0.1","level":"warn","message":"Invalid email/password","method":"POST","timestamp":"2026-10-07T12:56:05.202Z","url":"/api/v1/auth/login","user":"anonymous"}
+{"ip":"::ffff:127.0.0.1","level":"warn","message":"User does not exist","method":"GET","timestamp":"2026-10-07T13:16:27.104Z","url":"/api/v1/user/me","user":"bbaa1248-85d3-470c-9673-a322453edf89"}
+{"ip":"::ffff:127.0.0.1","level":"warn","message":"User not a member","method":"GET","timestamp":"2026-10-07T13:16:27.107Z","url":"/api/v1/tasks/ee5886e2-0784-4a6d-ad14-07304dd8dafa","user":"bbaa1248-85d3-470c-9673-a322453edf89"}
+{"ip":"::ffff:127.0.0.1","level":"warn","message":"Invalid email/password","method":"POST","timestamp":"2026-10-07T13:17:17.273Z","url":"/api/v1/auth/login","user":"anonymous"}
+{"ip":"::ffff:127.0.0.1","level":"warn","message":"Invalid email/password","method":"POST","timestamp":"2026-10-07T13:17:36.932Z","url":"/api/v1/auth/login","user":"anonymous"}
+{"ip":"::ffff:127.0.0.1","level":"warn","message":"Invalid email/password","method":"POST","timestamp":"2026-10-07T13:17:41.596Z","url":"/api/v1/auth/login","user":"anonymous"}

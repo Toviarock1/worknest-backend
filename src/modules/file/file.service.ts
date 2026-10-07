@@ -130,7 +130,7 @@ async function getProjectFiles(projectId: string, userId: string) {
   // surface in their own task panel, not in the shared chat feed.
   return await prisma.file.findMany({
     where: { projectId, taskId: null },
-    include: { uploader: { select: { name: true } } },
+    include: { uploader: { select: { name: true, avatarUrl: true } } },
     orderBy: {
       createdAt: "asc",
     },

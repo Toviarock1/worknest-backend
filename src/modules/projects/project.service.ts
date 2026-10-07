@@ -128,6 +128,7 @@ async function listProjectMembers(id: string, userId: string) {
             select: {
               name: true,
               email: true,
+              avatarUrl: true,
             },
           },
         },

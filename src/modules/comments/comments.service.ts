@@ -20,7 +20,7 @@ export async function listForTask(taskId: string, userId: string) {
     where: { taskId },
     orderBy: { createdAt: "asc" },
     include: {
-      author: { select: { id: true, name: true, email: true } },
+      author: { select: { id: true, name: true, email: true, avatarUrl: true } },
     },
   });
 }
@@ -40,7 +40,7 @@ export async function create(
       authorId: userId,
     },
     include: {
-      author: { select: { id: true, name: true, email: true } },
+      author: { select: { id: true, name: true, email: true, avatarUrl: true } },
     },
   });
 
