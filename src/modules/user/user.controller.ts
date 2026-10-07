@@ -53,3 +53,54 @@ export const searchUsers = catchAsync(async (req: Request, res: Response) => {
     }),
   );
 });
+
+export const uploadAvatar = catchAsync(
+  async (req: Request, res: Response) => {
+    const userId = (req as any).user.id;
+    const file = (req as any).file as Express.Multer.File | undefined;
+
+    if (!file) {
+      return res.status(statusCodes.BAD_REQUEST).json(
+        response({
+          message: "No image provided — attach an image as 'avatar'",
+          status: statusCodes.BAD_REQUEST,
+          success: false,
+          data: {},
+        }),
+      );
+    }
+
+    const user = await userService.uploadAvatar(
+      userId,
+      file.buffer,
+      file.originalname,
+      file.mimetype,
+      file.size,
+    );
+
+    return res.status(statusCodes.OK).json(
+      response({
+        message: "Profile picture updated",
+        status: statusCodes.OK,
+        success: true,
+        data: user,
+      }),
+    );
+  },
+);
+
+export const deleteAvatar = catchAsync(
+  async (req: Request, res: Response) => {
+    const userId = (req as any).user.id;
+    const user = await userService.removeAvatar(userId);
+
+    return res.status(statusCodes.OK).json(
+      response({
+        message: "Profile picture removed",
+        status: statusCodes.OK,
+        success: true,
+        data: user,
+      }),
+    );
+  },
+);

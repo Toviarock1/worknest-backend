@@ -71,7 +71,7 @@ export const ensureUserExist = async (email?: string, id?: string) => {
 
   const user = await prisma.user.findUnique({
     where: email ? { email } : { id },
-    select: { id: true, name: true, email: true, createdAt: true },
+    select: { id: true, name: true, email: true, avatarUrl: true, createdAt: true },
   });
   // console.log(user);
 
